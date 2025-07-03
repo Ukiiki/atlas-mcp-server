@@ -1,0 +1,24 @@
+{
+  "name": "atlas-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP Server for Atlas MemberClicks API integration",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "tsc && node dist/server.js",
+    "clean": "rm -rf dist",
+    "rebuild": "npm run clean && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["mcp", "atlas", "memberclicks", "api", "server"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.13.3",
+    "@types/node": "^24.0.10",
+    "node-fetch": "^3.3.2",
+    "typescript": "^5.8.3"
+  }
+}
