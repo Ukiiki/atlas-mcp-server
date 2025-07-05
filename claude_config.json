@@ -3,7 +3,11 @@
     "atlas-mcp-server": {
       "command": "node",
       "args": ["/Users/ukiiki/atlas-mcp-server/dist/server.js"],
-      "env": {}
+      "env": {
+        "ATLAS_CLIENT_SECRET": "1bd58eb5-f765-4fee-a139-312c9d4dead2",
+        "ATLAS_CLIENT_ID": "CarlsbadChamber",
+        "ATLAS_TENANT": "carlsbad"
+      }
     }
   }
 }

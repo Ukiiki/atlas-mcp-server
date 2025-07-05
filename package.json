@@ -12,12 +12,19 @@
     "rebuild": "npm run clean && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["mcp", "atlas", "memberclicks", "api", "server"],
+  "keywords": [
+    "mcp",
+    "atlas",
+    "memberclicks",
+    "api",
+    "server"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.13.3",
     "@types/node": "^24.0.10",
+    "dotenv": "^17.0.1",
     "node-fetch": "^3.3.2",
     "typescript": "^5.8.3"
   }

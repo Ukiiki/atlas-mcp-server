@@ -2,20 +2,35 @@
 
 ## Quick Setup for This Computer (macOS)
 
-### 1. Build the Server
+### 1. Set up Environment Variables
+
+First, create a `.env` file with your credentials:
+```bash
+cd /Users/ukiiki/atlas-mcp-server
+cp .env.example .env
+```
+
+Edit `.env` with your actual credentials:
+```env
+ATLAS_CLIENT_SECRET=your_actual_client_secret_here
+ATLAS_CLIENT_ID=CarlsbadChamber
+ATLAS_TENANT=carlsbad
+```
+
+### 2. Build the Server
 ```bash
 cd /Users/ukiiki/atlas-mcp-server
 npm run build
 ```
 
-### 2. Configure Claude Desktop
+### 3. Configure Claude Desktop
 
 The Claude Desktop configuration file is located at:
 ```
 ~/Library/Application Support/Claude/claude_desktop_config.json
 ```
 
-**Option A: Copy the entire configuration**
+**Option A: Copy the entire configuration (includes credentials)**
 ```bash
 cp claude_config.json ~/Library/Application\ Support/Claude/claude_desktop_config.json
 ```
@@ -29,16 +44,20 @@ If you already have other MCP servers configured, add this to your existing `cla
     "atlas-mcp-server": {
       "command": "node",
       "args": ["/Users/ukiiki/atlas-mcp-server/dist/server.js"],
-      "env": {}
+      "env": {
+        "ATLAS_CLIENT_SECRET": "1bd58eb5-f765-4fee-a139-312c9d4dead2",
+        "ATLAS_CLIENT_ID": "CarlsbadChamber",
+        "ATLAS_TENANT": "carlsbad"
+      }
     }
   }
 }
 ```
 
-### 3. Restart Claude Desktop
+### 4. Restart Claude Desktop
 Close and reopen Claude Desktop completely for the changes to take effect.
 
-### 4. Test the Connection
+### 5. Test the Connection
 In Claude Desktop, you should now be able to use tools like:
 - `get_members` - Get all Atlas MemberClicks members
 - `get_committees` - Get all committees

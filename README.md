@@ -67,11 +67,27 @@ npm run rebuild
 
 ## Configuration
 
-The server is configured for the Carlsbad Chamber with the following settings:
-- **Tenant**: carlsbad
-- **Client ID**: CarlsbadChamber
-- **API Base URL**: https://api-v1.weblinkconnect.com/api-v1
-- **Auth URL**: https://www.weblinkauth.com/connect/token
+The server uses environment variables for configuration. Required variables:
+
+- **ATLAS_CLIENT_SECRET**: Your Atlas MemberClicks client secret (required)
+- **ATLAS_CLIENT_ID**: Your client ID (default: CarlsbadChamber)
+- **ATLAS_TENANT**: Your tenant name (default: carlsbad)
+- **ATLAS_AUTH_URL**: Auth endpoint (default: https://www.weblinkauth.com/connect/token)
+- **ATLAS_API_BASE_URL**: API endpoint (default: https://api-v1.weblinkconnect.com/api-v1)
+
+### Environment Setup
+
+1. **Copy the example file:**
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Edit .env with your credentials:**
+   ```env
+   ATLAS_CLIENT_SECRET=your_actual_client_secret_here
+   ATLAS_CLIENT_ID=CarlsbadChamber
+   ATLAS_TENANT=carlsbad
+   ```
 
 ## Authentication
 

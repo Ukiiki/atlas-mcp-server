@@ -8,13 +8,29 @@ import {
   McpError,
 } from '@modelcontextprotocol/sdk/types.js';
 import fetch from 'node-fetch';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Get __dirname equivalent for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load environment variables from .env file
+dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
 // Atlas MemberClicks API Configuration
-const AUTH_URL = 'https://www.weblinkauth.com/connect/token';
-const API_BASE_URL = 'https://api-v1.weblinkconnect.com/api-v1';
-const CLIENT_ID = 'CarlsbadChamber';
-const CLIENT_SECRET = '1bd58eb5-f765-4fee-a139-312c9d4dead2';
-const TENANT = 'carlsbad';
+const AUTH_URL = process.env.ATLAS_AUTH_URL || 'https://www.weblinkauth.com/connect/token';
+const API_BASE_URL = process.env.ATLAS_API_BASE_URL || 'https://api-v1.weblinkconnect.com/api-v1';
+const CLIENT_ID = process.env.ATLAS_CLIENT_ID || 'CarlsbadChamber';
+const CLIENT_SECRET = process.env.ATLAS_CLIENT_SECRET;
+const TENANT = process.env.ATLAS_TENANT || 'carlsbad';
+
+// Validate required environment variables
+if (!CLIENT_SECRET) {
+  console.error('Error: ATLAS_CLIENT_SECRET environment variable is required');
+  process.exit(1);
+}
 
 // Types for API responses
 interface AuthResponse {
@@ -78,7 +94,7 @@ class AtlasAPI {
       grant_type: 'client_credentials',
       scope: 'PublicWebApi',
       client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
+      client_secret: CLIENT_SECRET!,
       response_type: 'token',
       acr_values: `tenant:${TENANT}`
     });
