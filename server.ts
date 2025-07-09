@@ -8,16 +8,17 @@ import {
   McpError,
 } from '@modelcontextprotocol/sdk/types.js';
 import fetch from 'node-fetch';
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
+// Remove dotenv import since we're getting env vars from Claude config
+// import dotenv from 'dotenv';
+// import path from 'path';
+// import { fileURLToPath } from 'url';
 
 // Get __dirname equivalent for ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 // Load environment variables from .env file
-dotenv.config({ path: path.join(__dirname, '..', '.env') });
+// dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
 // Atlas MemberClicks API Configuration
 const AUTH_URL = process.env.ATLAS_AUTH_URL || 'https://www.weblinkauth.com/connect/token';
