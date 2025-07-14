@@ -1,6 +1,6 @@
-# Carl's Bad MCP Server
+# Atlas Bridge System
 
-A Model Context Protocol (MCP) server that provides AI-powered chamber management integration with the Atlas MemberClicks API for managing members, committees, and events.
+A Next.js chamber management platform with AI-powered assistance for extracting and managing chamber data. This system serves as a bridge to help chambers migrate their data from legacy systems to modern platforms.
 
 ## Features
 
@@ -67,69 +67,66 @@ npm run rebuild
 
 ## Configuration
 
-The server uses environment variables for configuration. Required variables:
-
-- **ATLAS_CLIENT_SECRET**: Your Atlas MemberClicks client secret (required)
-- **ATLAS_CLIENT_ID**: Your client ID (default: CarlsbadChamber)
-- **ATLAS_TENANT**: Your tenant name (default: carlsbad)
-- **ATLAS_AUTH_URL**: Auth endpoint (default: https://www.weblinkauth.com/connect/token)
-- **ATLAS_API_BASE_URL**: API endpoint (default: https://api-v1.weblinkconnect.com/api-v1)
+The system uses environment variables for configuration. All sensitive credentials should be stored in environment files and never committed to the repository.
 
 ### Environment Setup
 
-1. **Copy the example file:**
+1. **Backend (MCP Server):**
    ```bash
    cp .env.example .env
+   # Edit .env with your API credentials
    ```
 
-2. **Edit .env with your credentials:**
-   ```env
-   ATLAS_CLIENT_SECRET=your_actual_client_secret_here
-   ATLAS_CLIENT_ID=CarlsbadChamber
-   ATLAS_TENANT=carlsbad
+2. **Frontend (Next.js):**
+   ```bash
+   cd atlas-frontend
+   cp .env.local.example .env.local
+   # Add your OpenAI API key and other config
    ```
 
 ## Authentication
 
 The server handles OAuth2 authentication automatically using the client credentials flow. Access tokens are automatically refreshed before expiration.
 
-## Usage with MCP Clients
+## Frontend Deployment
 
-Once running, the server can be connected to MCP clients like Cline, Claude Desktop, or other MCP-compatible applications. The server exposes tools for all the member, committee, and event management functions.
+The `atlas-frontend` directory contains a Next.js application that provides a modern web interface for chamber management.
 
-### Example Tool Calls
-
-```typescript
-// Get all members
-use_mcp_tool("atlas-mcp-server", "get_members", {})
-
-// Get new members from last 3 days
-use_mcp_tool("atlas-mcp-server", "get_new_members", { "daysBack": 3 })
-
-// Get specific committee with members
-use_mcp_tool("atlas-mcp-server", "get_committee_with_members", { "committeeId": "123" })
-
-// Add new member
-use_mcp_tool("atlas-mcp-server", "add_member", {
-  "memberData": {
-    "FirstName": "John",
-    "LastName": "Doe", 
-    "Email": "john.doe@example.com",
-    "Company": "Example Corp"
-  }
-})
-
-// Check for new members and get workflow suggestions
-use_mcp_tool("atlas-mcp-server", "check_member_notifications", { "daysBack": 1 })
+### Quick Start
+```bash
+cd atlas-frontend
+npm install
+npm run dev
 ```
 
-## API Coverage
+### Production Build
+```bash
+cd atlas-frontend
+npm run build
+npm start
+```
 
-This MCP server provides access to the following Atlas MemberClicks API endpoints:
-- `/profiles` - Member profile management
-- `/Committees` - Committee information
-- `/CommitteeMembers` - Committee membership
-- `/Events` - Event management
+### Features
+- 📊 **Dashboard** - Chamber analytics and member overview
+- 👥 **Member Management** - View and manage member profiles  
+- 📅 **Event Management** - Track chamber events and registrations
+- 💰 **Payment Tracking** - Monitor invoices and payments
+- 🤖 **AI Assistant** - CopilotKit integration for intelligent interactions
+
+## System Architecture
+
+This bridge system consists of:
+
+### **Backend (MCP Server)**
+- Model Context Protocol server for API integration
+- Secure authentication and data extraction
+- Real-time chamber data synchronization
+
+### **Frontend (Next.js)**  
+- Modern React-based dashboard
+- CopilotKit AI assistant integration
+- Responsive design for all devices
+- Real-time data visualization
 
 ## Workflow Integration
 
@@ -157,9 +154,13 @@ The server includes comprehensive error handling:
 - Modular design for easy extension
 - Full support for all required Atlas MemberClicks operations
 
-## Support
+## Deployment
 
-For issues or questions about Carl's Bad MCP Server or the Atlas MemberClicks API, refer to their documentation:
-- [Getting Started](https://api-v1.weblinkconnect.com/api-v1/getting-started/)
-- [API Resources](https://api-v1.weblinkconnect.com/api-v1/api-resources/)
-- [Profile Resources](https://api-v1.weblinkconnect.com/api-v1/api-resources/Profile)
+This system is designed for easy deployment to modern hosting platforms:
+
+- **Coolify** - Self-hosted deployment platform
+- **Vercel** - Automatic Next.js deployments  
+- **Docker** - Containerized deployment
+- **VPS** - Traditional server hosting
+
+See `README_FRONTEND.md` for detailed deployment instructions.
