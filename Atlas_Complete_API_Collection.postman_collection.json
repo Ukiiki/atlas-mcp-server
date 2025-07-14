@@ -1,0 +1,1177 @@
+{
+  "info": {
+    "name": "Atlas Complete API Collection - All Real Endpoints",
+    "description": "Complete collection of all verified real Atlas MemberClicks API endpoints discovered through documentation review. This collection includes all working endpoints for Profiles, Events, Registration, Payments, Custom Fields, Member Activity, and more.\n\nBased on discovery documented in ATLAS_REAL_ENDPOINTS_DISCOVERED.md",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "auth_url",
+      "value": "https://www.weblinkauth.com/connect/token",
+      "type": "string"
+    },
+    {
+      "key": "api_base_url",
+      "value": "https://api-v1.weblinkconnect.com/api-v1",
+      "type": "string"
+    },
+    {
+      "key": "client_id",
+      "value": "CarlsbadChamber",
+      "type": "string"
+    },
+    {
+      "key": "client_secret",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "tenant",
+      "value": "carlsbad",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Get Access Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('access_token', response.access_token);",
+                  "    console.log('Access token set:', response.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                },
+                {
+                  "key": "scope",
+                  "value": "PublicWebApi"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{client_id}}"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{client_secret}}"
+                },
+                {
+                  "key": "response_type",
+                  "value": "token"
+                },
+                {
+                  "key": "acr_values",
+                  "value": "tenant:{{tenant}}"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{auth_url}}",
+              "host": ["{{auth_url}}"]
+            },
+            "description": "Get OAuth2 access token for Atlas API authentication"
+          }
+        }
+      ],
+      "description": "Authentication endpoints for Atlas API"
+    },
+    {
+      "name": "Profile Management",
+      "item": [
+        {
+          "name": "Get All Profiles",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/profiles?RestrictToMember=true&PageSize=100",
+              "host": ["{{api_base_url}}"],
+              "path": ["profiles"],
+              "query": [
+                {
+                  "key": "RestrictToMember",
+                  "value": "true"
+                },
+                {
+                  "key": "PageSize",
+                  "value": "100"
+                }
+              ]
+            },
+            "description": "Get all member profiles with optional filtering"
+          }
+        },
+        {
+          "name": "Get Profile by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/profiles/{{profile_id}}",
+              "host": ["{{api_base_url}}"],
+              "path": ["profiles", "{{profile_id}}"]
+            },
+            "description": "Get a specific profile by ID"
+          }
+        },
+        {
+          "name": "Create Profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"FirstName\": \"John\",\n  \"LastName\": \"Doe\",\n  \"Email\": \"john.doe@example.com\",\n  \"WorkPhone\": \"555-123-4567\",\n  \"OrgName\": \"Example Company\"\n}"
+            },
+            "url": {
+              "raw": "{{api_base_url}}/profiles",
+              "host": ["{{api_base_url}}"],
+              "path": ["profiles"]
+            },
+            "description": "Create a new profile"
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"FirstName\": \"Jane\",\n  \"LastName\": \"Doe\",\n  \"Email\": \"jane.doe@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{api_base_url}}/profiles/{{profile_id}}",
+              "host": ["{{api_base_url}}"],
+              "path": ["profiles", "{{profile_id}}"]
+            },
+            "description": "Update an existing profile"
+          }
+        }
+      ],
+      "description": "Profile management endpoints"
+    },
+    {
+      "name": "Profile Custom Fields",
+      "item": [
+        {
+          "name": "Get Profile Custom Fields",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Profile/{{profile_id}}/CustomFields",
+              "host": ["{{api_base_url}}"],
+              "path": ["Profile", "{{profile_id}}", "CustomFields"]
+            },
+            "description": "Get custom fields for a specific profile"
+          }
+        },
+        {
+          "name": "Create Profile Custom Field",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"FieldName\": \"Department\",\n  \"FieldValue\": \"Marketing\",\n  \"FieldType\": \"Text\"\n}"
+            },
+            "url": {
+              "raw": "{{api_base_url}}/Profile/{{profile_id}}/CustomFields",
+              "host": ["{{api_base_url}}"],
+              "path": ["Profile", "{{profile_id}}", "CustomFields"]
+            },
+            "description": "Add a custom field to a profile"
+          }
+        },
+        {
+          "name": "Update Profile Custom Field",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"FieldValue\": \"Sales\"\n}"
+            },
+            "url": {
+              "raw": "{{api_base_url}}/Profile/{{profile_id}}/CustomFields/{{custom_field_id}}",
+              "host": ["{{api_base_url}}"],
+              "path": ["Profile", "{{profile_id}}", "CustomFields", "{{custom_field_id}}"]
+            },
+            "description": "Update a profile custom field"
+          }
+        },
+        {
+          "name": "Get Custom Field by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Profile/CustomField/{{custom_field_id}}",
+              "host": ["{{api_base_url}}"],
+              "path": ["Profile", "CustomField", "{{custom_field_id}}"]
+            },
+            "description": "Get custom field information by ID"
+          }
+        },
+        {
+          "name": "Create Custom Field Definition",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"FieldName\": \"Department\",\n  \"FieldType\": \"Text\",\n  \"IsRequired\": false\n}"
+            },
+            "url": {
+              "raw": "{{api_base_url}}/Profile/CustomField",
+              "host": ["{{api_base_url}}"],
+              "path": ["Profile", "CustomField"]
+            },
+            "description": "Create a new custom field definition"
+          }
+        },
+        {
+          "name": "Update Custom Field Definition",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"FieldName\": \"Department\",\n  \"FieldType\": \"Text\",\n  \"IsRequired\": true\n}"
+            },
+            "url": {
+              "raw": "{{api_base_url}}/Profile/CustomField",
+              "host": ["{{api_base_url}}"],
+              "path": ["Profile", "CustomField"]
+            },
+            "description": "Update an existing custom field definition"
+          }
+        }
+      ],
+      "description": "Profile custom fields management - NEW REAL FUNCTIONALITY"
+    },
+    {
+      "name": "Profile Member Activity",
+      "item": [
+        {
+          "name": "Get Profile Member Activity",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Profile/{{profile_id}}/MemberActivity",
+              "host": ["{{api_base_url}}"],
+              "path": ["Profile", "{{profile_id}}", "MemberActivity"]
+            },
+            "description": "Get member activity for a specific profile"
+          }
+        },
+        {
+          "name": "Create Member Activity",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ProfileId\": \"{{profile_id}}\",\n  \"ActivityType\": \"Committee Participation\",\n  \"Description\": \"Joined Marketing Committee\",\n  \"ActivityDate\": \"2024-01-15T00:00:00Z\"\n}"
+            },
+            "url": {
+              "raw": "{{api_base_url}}/MemberActivity",
+              "host": ["{{api_base_url}}"],
+              "path": ["MemberActivity"]
+            },
+            "description": "Create a new member activity record"
+          }
+        },
+        {
+          "name": "Update Member Activity",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ActivityId\": \"{{activity_id}}\",\n  \"Description\": \"Updated Committee Participation\"\n}"
+            },
+            "url": {
+              "raw": "{{api_base_url}}/MemberActivity",
+              "host": ["{{api_base_url}}"],
+              "path": ["MemberActivity"]
+            },
+            "description": "Update an existing member activity record"
+          }
+        }
+      ],
+      "description": "Member activity tracking - NEW REAL FUNCTIONALITY"
+    },
+    {
+      "name": "Committee Management",
+      "item": [
+        {
+          "name": "Get All Committees",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Committees?PageSize=20",
+              "host": ["{{api_base_url}}"],
+              "path": ["Committees"],
+              "query": [
+                {
+                  "key": "PageSize",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Get all committees"
+          }
+        },
+        {
+          "name": "Get Committee by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Committee/{{committee_id}}",
+              "host": ["{{api_base_url}}"],
+              "path": ["Committee", "{{committee_id}}"]
+            },
+            "description": "Get a specific committee by ID"
+          }
+        },
+        {
+          "name": "Get All Committee Members",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/CommitteeMembers",
+              "host": ["{{api_base_url}}"],
+              "path": ["CommitteeMembers"]
+            },
+            "description": "Get all committee members"
+          }
+        },
+        {
+          "name": "Get Committee Members by Committee ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/CommitteeMembers?CommitteeId={{committee_id}}",
+              "host": ["{{api_base_url}}"],
+              "path": ["CommitteeMembers"],
+              "query": [
+                {
+                  "key": "CommitteeId",
+                  "value": "{{committee_id}}"
+                }
+              ]
+            },
+            "description": "Get committee members for a specific committee"
+          }
+        }
+      ],
+      "description": "Committee management endpoints"
+    },
+    {
+      "name": "Event Management",
+      "item": [
+        {
+          "name": "Get All Events",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Events?PageSize=100",
+              "host": ["{{api_base_url}}"],
+              "path": ["Events"],
+              "query": [
+                {
+                  "key": "PageSize",
+                  "value": "100"
+                }
+              ]
+            },
+            "description": "Get all events"
+          }
+        },
+        {
+          "name": "Get Events (Enhanced v4)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Events-v4?PageSize=100",
+              "host": ["{{api_base_url}}"],
+              "path": ["Events-v4"],
+              "query": [
+                {
+                  "key": "PageSize",
+                  "value": "100"
+                }
+              ]
+            },
+            "description": "Get events with enhanced data (v4 endpoint)"
+          }
+        }
+      ],
+      "description": "Event management endpoints"
+    },
+    {
+      "name": "Event Registration System",
+      "item": [
+        {
+          "name": "Create Event Registration",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"EventId\": \"{{event_id}}\",\n  \"ProfileId\": \"{{profile_id}}\",\n  \"AttendeeCount\": 1\n}"
+            },
+            "url": {
+              "raw": "{{api_base_url}}/Event/Registrations",
+              "host": ["{{api_base_url}}"],
+              "path": ["Event", "Registrations"]
+            },
+            "description": "Create a new event registration - REAL FUNCTIONALITY"
+          }
+        },
+        {
+          "name": "Get Event Registration",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Event/Registration/{{registration_id}}",
+              "host": ["{{api_base_url}}"],
+              "path": ["Event", "Registration", "{{registration_id}}"]
+            },
+            "description": "Get a specific event registration"
+          }
+        },
+        {
+          "name": "Get Event Registration Update DTO",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Event/Registration/{{registration_id}}/UpdateDto",
+              "host": ["{{api_base_url}}"],
+              "path": ["Event", "Registration", "{{registration_id}}", "UpdateDto"]
+            },
+            "description": "Get registration update DTO for existing registration"
+          }
+        },
+        {
+          "name": "Get Event Registration Revenue Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Event/Registration/{{registration_id}}/RevenueDetails",
+              "host": ["{{api_base_url}}"],
+              "path": ["Event", "Registration", "{{registration_id}}", "RevenueDetails"]
+            },
+            "description": "Get revenue details for event registration"
+          }
+        },
+        {
+          "name": "Update Event Registration",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"AttendeeCount\": 2,\n  \"Status\": \"Confirmed\"\n}"
+            },
+            "url": {
+              "raw": "{{api_base_url}}/Event/Registration/{{registration_id}}",
+              "host": ["{{api_base_url}}"],
+              "path": ["Event", "Registration", "{{registration_id}}"]
+            },
+            "description": "Update an existing event registration"
+          }
+        },
+        {
+          "name": "Get Event Registrations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Event/{{event_id}}/Registrations",
+              "host": ["{{api_base_url}}"],
+              "path": ["Event", "{{event_id}}", "Registrations"]
+            },
+            "description": "Get all registrations for an event"
+          }
+        },
+        {
+          "name": "Get Event Registrations CSV",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Event/{{event_id}}/Registrations/csv",
+              "host": ["{{api_base_url}}"],
+              "path": ["Event", "{{event_id}}", "Registrations", "csv"]
+            },
+            "description": "Get event registrations as CSV"
+          }
+        },
+        {
+          "name": "Get Event Attendees",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Event/{{event_id}}/Attendees",
+              "host": ["{{api_base_url}}"],
+              "path": ["Event", "{{event_id}}", "Attendees"]
+            },
+            "description": "Get attendees for an event"
+          }
+        },
+        {
+          "name": "Flag Event Items as Attended",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"EventItemIds\": [\"{{event_item_id}}\"],\n  \"AttendeeHeaderIds\": [\"{{attendee_header_id}}\"],\n  \"IsAttended\": true\n}"
+            },
+            "url": {
+              "raw": "{{api_base_url}}/EventAttendees/FlagEventItemsAsAttendedOrNotAttended",
+              "host": ["{{api_base_url}}"],
+              "path": ["EventAttendees", "FlagEventItemsAsAttendedOrNotAttended"]
+            },
+            "description": "Flag event items as attended or not attended"
+          }
+        }
+      ],
+      "description": "Event registration system - NEW REAL FUNCTIONALITY"
+    },
+    {
+      "name": "Invoice Management",
+      "item": [
+        {
+          "name": "Get Invoice",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Invoice/{{invoice_id}}",
+              "host": ["{{api_base_url}}"],
+              "path": ["Invoice", "{{invoice_id}}"]
+            },
+            "description": "Get a specific invoice by ID"
+          }
+        },
+        {
+          "name": "Search Invoices",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Invoices?ProfileId={{profile_id}}&Status=Pending",
+              "host": ["{{api_base_url}}"],
+              "path": ["Invoices"],
+              "query": [
+                {
+                  "key": "ProfileId",
+                  "value": "{{profile_id}}"
+                },
+                {
+                  "key": "Status",
+                  "value": "Pending"
+                }
+              ]
+            },
+            "description": "Search for invoices with filters"
+          }
+        },
+        {
+          "name": "Create Invoice",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ProfileId\": \"{{profile_id}}\",\n  \"Amount\": 100.00,\n  \"DueDate\": \"2024-02-15T00:00:00Z\",\n  \"Description\": \"Membership Dues\"\n}"
+            },
+            "url": {
+              "raw": "{{api_base_url}}/Invoices",
+              "host": ["{{api_base_url}}"],
+              "path": ["Invoices"]
+            },
+            "description": "Create a new invoice - REAL FUNCTIONALITY"
+          }
+        },
+        {
+          "name": "Update Invoice",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Amount\": 120.00,\n  \"Status\": \"Sent\"\n}"
+            },
+            "url": {
+              "raw": "{{api_base_url}}/Invoice/{{invoice_id}}",
+              "host": ["{{api_base_url}}"],
+              "path": ["Invoice", "{{invoice_id}}"]
+            },
+            "description": "Update an existing invoice"
+          }
+        },
+        {
+          "name": "Create Invoice Line Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"InvoiceId\": \"{{invoice_id}}\",\n  \"Description\": \"Event Registration Fee\",\n  \"Amount\": 50.00,\n  \"Quantity\": 1\n}"
+            },
+            "url": {
+              "raw": "{{api_base_url}}/InvoiceLineItems",
+              "host": ["{{api_base_url}}"],
+              "path": ["InvoiceLineItems"]
+            },
+            "description": "Add a line item to an existing invoice"
+          }
+        }
+      ],
+      "description": "Invoice management system - NEW REAL FUNCTIONALITY"
+    },
+    {
+      "name": "Payment Management",
+      "item": [
+        {
+          "name": "Create Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"InvoiceNum\": \"{{invoice_id}}\",\n  \"Amount\": 100.00,\n  \"PaymentDate\": \"2024-01-15T00:00:00Z\",\n  \"PaymentType\": \"Credit Card\"\n}"
+            },
+            "url": {
+              "raw": "{{api_base_url}}/Payments",
+              "host": ["{{api_base_url}}"],
+              "path": ["Payments"]
+            },
+            "description": "Create a new payment - REAL FUNCTIONALITY"
+          }
+        },
+        {
+          "name": "Get Payment",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Payment/{{payment_id}}",
+              "host": ["{{api_base_url}}"],
+              "path": ["Payment", "{{payment_id}}"]
+            },
+            "description": "Get a specific payment by ID"
+          }
+        },
+        {
+          "name": "Search Payments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Payments?InvoiceNum={{invoice_id}}",
+              "host": ["{{api_base_url}}"],
+              "path": ["Payments"],
+              "query": [
+                {
+                  "key": "InvoiceNum",
+                  "value": "{{invoice_id}}"
+                }
+              ]
+            },
+            "description": "Search for payments with filters"
+          }
+        },
+        {
+          "name": "Get Invoice Payments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Payments/{{invoice_id}}",
+              "host": ["{{api_base_url}}"],
+              "path": ["Payments", "{{invoice_id}}"]
+            },
+            "description": "Get all payments for a specific invoice"
+          }
+        },
+        {
+          "name": "Get Active Payment Types",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/PaymentTypes/ActivePaymentTypes",
+              "host": ["{{api_base_url}}"],
+              "path": ["PaymentTypes", "ActivePaymentTypes"]
+            },
+            "description": "Get all active payment types"
+          }
+        }
+      ],
+      "description": "Payment management system - NEW REAL FUNCTIONALITY"
+    },
+    {
+      "name": "Business Listings",
+      "item": [
+        {
+          "name": "Get Business Listings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Listings?Active=true&PageSize=200&OrderBy=DateChanged&OrderByExpression=DESC&ObjectState=0",
+              "host": ["{{api_base_url}}"],
+              "path": ["Listings"],
+              "query": [
+                {
+                  "key": "Active",
+                  "value": "true"
+                },
+                {
+                  "key": "PageSize",
+                  "value": "200"
+                },
+                {
+                  "key": "OrderBy",
+                  "value": "DateChanged"
+                },
+                {
+                  "key": "OrderByExpression",
+                  "value": "DESC"
+                },
+                {
+                  "key": "ObjectState",
+                  "value": "0"
+                }
+              ]
+            },
+            "description": "Get business listings with filtering"
+          }
+        },
+        {
+          "name": "Get Listing Categories",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/ListingCategories?PageSize=200&OrderBy=Category&PageNumber=1",
+              "host": ["{{api_base_url}}"],
+              "path": ["ListingCategories"],
+              "query": [
+                {
+                  "key": "PageSize",
+                  "value": "200"
+                },
+                {
+                  "key": "OrderBy",
+                  "value": "Category"
+                },
+                {
+                  "key": "PageNumber",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get business listing categories"
+          }
+        },
+        {
+          "name": "Get Listing Types",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/ListingTypes?PageSize=200",
+              "host": ["{{api_base_url}}"],
+              "path": ["ListingTypes"],
+              "query": [
+                {
+                  "key": "PageSize",
+                  "value": "200"
+                }
+              ]
+            },
+            "description": "Get business listing types"
+          }
+        }
+      ],
+      "description": "Business listings management"
+    },
+    {
+      "name": "Contact Management",
+      "item": [
+        {
+          "name": "Get Contacts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Contacts?PageSize=200",
+              "host": ["{{api_base_url}}"],
+              "path": ["Contacts"],
+              "query": [
+                {
+                  "key": "PageSize",
+                  "value": "200"
+                }
+              ]
+            },
+            "description": "Get contact information"
+          }
+        }
+      ],
+      "description": "Contact management endpoints"
+    },
+    {
+      "name": "Image Management",
+      "item": [
+        {
+          "name": "Search Images",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant",
+                "value": "{{tenant}}"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base_url}}/Images",
+              "host": ["{{api_base_url}}"],
+              "path": ["Images"]
+            },
+            "description": "Search for images - NEW REAL FUNCTIONALITY"
+          }
+        }
+      ],
+      "description": "Image management - NEW REAL FUNCTIONALITY"
+    }
+  ]
+}

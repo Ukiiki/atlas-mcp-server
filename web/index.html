@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carl's Bad Chamber Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-users"></i> Carl's Bad Chamber Dashboard</h1>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="refreshData()">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('dashboard')">
+                <i class="fas fa-chart-dashboard"></i> Dashboard
+            </button>
+            <button class="tab-button" onclick="showTab('members')">
+                <i class="fas fa-users"></i> Members
+            </button>
+            <button class="tab-button" onclick="showTab('committees')">
+                <i class="fas fa-users-cog"></i> Committees
+            </button>
+            <button class="tab-button" onclick="showTab('events')">
+                <i class="fas fa-calendar"></i> Events
+            </button>
+            <button class="tab-button" onclick="showTab('business')">
+                <i class="fas fa-building"></i> Business Directory
+            </button>
+        </nav>
+
+        <main class="main-content">
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-users"></i> Member Overview</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="stat-grid">
+                                <div class="stat-item">
+                                    <div class="stat-value" id="totalMembers">-</div>
+                                    <div class="stat-label">Total Members</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="newMembers">-</div>
+                                    <div class="stat-label">New This Week</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="membersWithBusiness">-</div>
+                                    <div class="stat-label">Have Businesses</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-calendar"></i> Event Analytics</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="stat-grid">
+                                <div class="stat-item">
+                                    <div class="stat-value" id="totalEvents">-</div>
+                                    <div class="stat-label">Total Events</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="eventAttendees">-</div>
+                                    <div class="stat-label">Total Attendees</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="eventRevenue">-</div>
+                                    <div class="stat-label">Revenue</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-users-cog"></i> Committee Activity</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="stat-grid">
+                                <div class="stat-item">
+                                    <div class="stat-value" id="totalCommittees">-</div>
+                                    <div class="stat-label">Active Committees</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="committeeMembers">-</div>
+                                    <div class="stat-label">Committee Members</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="committeeEvents">-</div>
+                                    <div class="stat-label">Committee Events</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card full-width">
+                        <div class="card-header">
+                            <h3><i class="fas fa-chart-pie"></i> Top Business Categories</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="businessCategories">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Members Tab -->
+            <div id="members" class="tab-content">
+                <div class="tab-header">
+                    <h2><i class="fas fa-users"></i> Member Directory</h2>
+                    <button class="btn btn-primary" onclick="showAddMemberForm()">
+                        <i class="fas fa-plus"></i> Add Member
+                    </button>
+                </div>
+                
+                <div class="search-bar">
+                    <input type="text" id="memberSearch" placeholder="Search members..." onkeyup="filterMembers()">
+                </div>
+
+                <div class="table-container">
+                    <table id="membersTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Company</th>
+                                <th>Status</th>
+                                <th>Join Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="membersTableBody">
+                            <tr><td colspan="6" class="loading">Loading members...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Committees Tab -->
+            <div id="committees" class="tab-content">
+                <div class="tab-header">
+                    <h2><i class="fas fa-users-cog"></i> Committee Management</h2>
+                </div>
+                
+                <div class="committee-grid">
+                    <div id="committeeList">Loading committees...</div>
+                </div>
+            </div>
+
+            <!-- Events Tab -->
+            <div id="events" class="tab-content">
+                <div class="tab-header">
+                    <h2><i class="fas fa-calendar"></i> Event Calendar</h2>
+                    <div class="tab-filters">
+                        <button class="btn btn-secondary" onclick="filterEvents('all')">All Events</button>
+                        <button class="btn btn-secondary" onclick="filterEvents('upcoming')">Upcoming</button>
+                        <button class="btn btn-secondary" onclick="filterEvents('committee')">Committee</button>
+                    </div>
+                </div>
+                
+                <div class="events-grid">
+                    <div id="eventsList">Loading events...</div>
+                </div>
+            </div>
+
+            <!-- Business Directory Tab -->
+            <div id="business" class="tab-content">
+                <div class="tab-header">
+                    <h2><i class="fas fa-building"></i> Business Directory</h2>
+                </div>
+                
+                <div class="search-bar">
+                    <input type="text" id="businessSearch" placeholder="Search businesses..." onkeyup="filterBusinesses()">
+                    <select id="categoryFilter" onchange="filterBusinesses()">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+
+                <div class="business-grid">
+                    <div id="businessList">Loading businesses...</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Member Modal -->
+    <div id="addMemberModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddMemberForm()">&times;</span>
+            <h2>Add New Member</h2>
+            <form id="addMemberForm">
+                <div class="form-group">
+                    <label for="firstName">First Name *</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name *</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone" name="phone">
+                </div>
+                <div class="form-group">
+                    <label for="company">Company</label>
+                    <input type="text" id="company" name="company">
+                </div>
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeAddMemberForm()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Member</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

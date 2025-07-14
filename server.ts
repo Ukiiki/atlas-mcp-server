@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+import dotenv from 'dotenv';
+dotenv.config();
+
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import {
@@ -8,17 +11,6 @@ import {
   McpError,
 } from '@modelcontextprotocol/sdk/types.js';
 import fetch from 'node-fetch';
-// Remove dotenv import since we're getting env vars from Claude config
-// import dotenv from 'dotenv';
-// import path from 'path';
-// import { fileURLToPath } from 'url';
-
-// Get __dirname equivalent for ES modules
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
-
-// Load environment variables from .env file
-// dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
 // Atlas MemberClicks API Configuration
 const AUTH_URL = process.env.ATLAS_AUTH_URL || 'https://www.weblinkauth.com/connect/token';
@@ -33,24 +25,42 @@ if (!CLIENT_SECRET) {
   process.exit(1);
 }
 
-// Types for API responses
+// Types for API responses - REAL ATLAS TYPES ONLY
 interface AuthResponse {
   access_token: string;
   token_type: string;
   expires_in: number;
 }
 
-interface Member {
-  Id: string;
+interface Profile {
+  ProfileId: number;
+  OrgInd: boolean;
+  Member: boolean;
+  Prospect: boolean;
+  Email: string;
+  ReportName: string;
+  OrgName: string;
+  Prefix: string;
   FirstName: string;
   LastName: string;
-  Email: string;
-  Phone?: string;
-  Company?: string;
-  Title?: string;
-  Status: string;
-  MembershipType?: string;
-  JoinDate?: string;
+  Title: string;
+  WorkPhone: string;
+  HomePhone: string;
+  CellPhone: string;
+  PhoneDefault: string;
+  Address1: string;
+  Address2: string;
+  City: string;
+  State: string;
+  Zip: string;
+  MainRelatedProfileName?: string;
+  MainRelatedProfileId: number;
+  ProfileTypeId: number;
+  Website: string;
+  DateChanged: string;
+  County: string;
+  Country: string;
+  MemberTypeIconColor: string;
   [key: string]: any;
 }
 
@@ -87,6 +97,53 @@ interface Event {
   [key: string]: any;
 }
 
+interface Registration {
+  RegistrationId: string;
+  EventId: string;
+  ProfileId: string;
+  RegistrationDate: string;
+  Status: string;
+  AttendeeCount: number;
+  [key: string]: any;
+}
+
+interface Invoice {
+  InvoiceNum: string;
+  ProfileId: string;
+  InvoiceDate: string;
+  DueDate: string;
+  Amount: number;
+  Status: string;
+  [key: string]: any;
+}
+
+interface Payment {
+  PaymentId: string;
+  InvoiceNum: string;
+  Amount: number;
+  PaymentDate: string;
+  PaymentType: string;
+  [key: string]: any;
+}
+
+interface CustomField {
+  CustomFieldId: string;
+  ProfileId: string;
+  FieldName: string;
+  FieldValue: string;
+  FieldType: string;
+  [key: string]: any;
+}
+
+interface MemberActivity {
+  ActivityId: string;
+  ProfileId: string;
+  ActivityType: string;
+  Description: string;
+  ActivityDate: string;
+  [key: string]: any;
+}
+
 interface BusinessListing {
   Id: string;
   Name: string;
@@ -111,13 +168,6 @@ interface ListingCategory {
   [key: string]: any;
 }
 
-interface ListingType {
-  Id: string;
-  Name: string;
-  Description?: string;
-  [key: string]: any;
-}
-
 interface Contact {
   Id: string;
   FirstName: string;
@@ -126,6 +176,14 @@ interface Contact {
   Phone?: string;
   Company?: string;
   ProfileId?: string;
+  [key: string]: any;
+}
+
+interface Image {
+  ImageId: string;
+  FileName: string;
+  Description?: string;
+  Url: string;
   [key: string]: any;
 }
 
@@ -194,29 +252,67 @@ class AtlasAPI {
     return response.json();
   }
 
-  // Member Management Methods
-  async getMembers(restrictToMember: boolean = true): Promise<Member[]> {
-    const params = restrictToMember ? '?RestrictToMember=true' : '';
-    return this.makeRequest(`/profiles${params}`);
+  // ===== PROFILE MANAGEMENT =====
+  async getProfiles(restrictToMember: boolean = true, pageSize: number = 100): Promise<Profile[]> {
+    const params = new URLSearchParams();
+    if (restrictToMember) params.append('RestrictToMember', 'true');
+    if (pageSize) params.append('PageSize', pageSize.toString());
+    
+    const queryString = params.toString() ? `?${params.toString()}` : '';
+    return this.makeRequest(`/profiles${queryString}`);
   }
 
-  async getMemberById(id: string): Promise<Member> {
+  async getProfileById(id: string): Promise<Profile> {
     return this.makeRequest(`/profiles/${id}`);
   }
 
-  async updateMemberProfile(id: string, profileData: Partial<Member>): Promise<Member> {
+  async createProfile(profileData: Partial<Profile>): Promise<Profile> {
+    return this.makeRequest('/profiles', 'POST', profileData);
+  }
+
+  async updateProfile(id: string, profileData: Partial<Profile>): Promise<Profile> {
     return this.makeRequest(`/profiles/${id}`, 'PUT', profileData);
   }
 
-  async suspendMember(id: string): Promise<any> {
-    return this.makeRequest(`/profiles/${id}/suspend`, 'POST');
+  // ===== PROFILE CUSTOM FIELDS =====
+  async getProfileCustomFields(profileId: string): Promise<CustomField[]> {
+    return this.makeRequest(`/Profile/${profileId}/CustomFields`);
   }
 
-  async addMember(memberData: Partial<Member>): Promise<Member> {
-    return this.makeRequest('/profiles', 'POST', memberData);
+  async createProfileCustomField(profileId: string, customFieldData: Partial<CustomField>): Promise<CustomField> {
+    return this.makeRequest(`/Profile/${profileId}/CustomFields`, 'POST', customFieldData);
   }
 
-  // Committee Management Methods
+  async updateProfileCustomField(profileId: string, customFieldId: string, customFieldData: Partial<CustomField>): Promise<CustomField> {
+    return this.makeRequest(`/Profile/${profileId}/CustomFields/${customFieldId}`, 'PUT', customFieldData);
+  }
+
+  async getCustomFieldById(id: string): Promise<CustomField> {
+    return this.makeRequest(`/Profile/CustomField/${id}`);
+  }
+
+  async createCustomField(customFieldData: Partial<CustomField>): Promise<CustomField> {
+    return this.makeRequest('/Profile/CustomField', 'POST', customFieldData);
+  }
+
+  async updateCustomField(customFieldData: Partial<CustomField>): Promise<CustomField> {
+    return this.makeRequest('/Profile/CustomField', 'PUT', customFieldData);
+  }
+
+  // ===== PROFILE MEMBER ACTIVITY =====
+  async getProfileMemberActivity(profileId: string): Promise<MemberActivity[]> {
+    return this.makeRequest(`/Profile/${profileId}/MemberActivity`);
+  }
+
+  async createMemberActivity(activityData: Partial<MemberActivity>): Promise<MemberActivity> {
+    return this.makeRequest('/MemberActivity', 'POST', activityData);
+  }
+
+  async updateMemberActivity(activityData: Partial<MemberActivity>): Promise<MemberActivity> {
+    return this.makeRequest('/MemberActivity', 'PUT', activityData);
+  }
+
+  // ===== COMMITTEE MANAGEMENT =====
   async getCommittees(pageSize: number = 20): Promise<Committee[]> {
     return this.makeRequest(`/Committees?PageSize=${pageSize}`);
   }
@@ -229,49 +325,98 @@ class AtlasAPI {
     return this.makeRequest(`/CommitteeMembers?CommitteeId=${committeeId}`);
   }
 
-  // Event Management Methods
+  async getCommitteeById(id: string): Promise<Committee> {
+    return this.makeRequest(`/Committee/${id}`);
+  }
+
+  // ===== EVENT MANAGEMENT =====
   async getEvents(pageSize: number = 100): Promise<Event[]> {
     return this.makeRequest(`/Events?PageSize=${pageSize}`);
   }
 
-  async getEventsV4(pageSize: number = 100): Promise<Event[]> {
-    return this.makeRequest(`/Events-v4?PageSize=${pageSize}`);
+
+  // ===== EVENT REGISTRATION SYSTEM =====
+  async createEventRegistration(registrationData: Partial<Registration>): Promise<Registration> {
+    return this.makeRequest('/Event/Registrations', 'POST', registrationData);
   }
 
-  async getUpcomingEvents(): Promise<Event[]> {
-    const events = await this.getEventsV4();
-    const now = new Date();
-    return events.filter(event => new Date(event.StartDate) > now);
+  async getEventRegistration(id: string): Promise<Registration> {
+    return this.makeRequest(`/Event/Registration/${id}`);
   }
 
-  async getCommitteeEvents(): Promise<Event[]> {
-    const events = await this.getEventsV4();
-    return events.filter(event => event.EventType === 'Committee Meetings');
+  async getEventRegistrationUpdateDto(id: string): Promise<any> {
+    return this.makeRequest(`/Event/Registration/${id}/UpdateDto`);
   }
 
-  async getEventAttendanceAnalysis(): Promise<any> {
-    const events = await this.getEventsV4();
-    const committeeEvents = events.filter(event => event.EventType === 'Committee Meetings');
-    const networkingEvents = events.filter(event => event.EventType === 'Networking');
-    
-    return {
-      totalEvents: events.length,
-      committeeEvents: committeeEvents.length,
-      networkingEvents: networkingEvents.length,
-      totalAttendees: events.reduce((sum, event) => sum + (event.AttendingAttendees || 0), 0),
-      totalRevenue: events.reduce((sum, event) => sum + (event.TotalInvoiced || 0), 0),
-      averageAttendance: events.length > 0 
-        ? events.reduce((sum, event) => sum + (event.AttendingAttendees || 0), 0) / events.length 
-        : 0,
-      eventsByType: events.reduce((acc, event) => {
-        const type = event.EventType || 'Unknown';
-        acc[type] = (acc[type] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>)
-    };
+  async getEventRegistrationRevenueDetails(id: string): Promise<any> {
+    return this.makeRequest(`/Event/Registration/${id}/RevenueDetails`);
   }
 
-  // Business Listing Methods
+  async updateEventRegistration(id: string, registrationData: Partial<Registration>): Promise<Registration> {
+    return this.makeRequest(`/Event/Registration/${id}`, 'PUT', registrationData);
+  }
+
+  async getEventRegistrations(eventId: string): Promise<Registration[]> {
+    return this.makeRequest(`/Event/${eventId}/Registrations`);
+  }
+
+  async getEventRegistrationsCSV(eventId: string): Promise<string> {
+    return this.makeRequest(`/Event/${eventId}/Registrations/csv`);
+  }
+
+  async getEventAttendees(eventId: string): Promise<any[]> {
+    return this.makeRequest(`/Event/${eventId}/Attendees`);
+  }
+
+  async flagEventItemsAsAttended(data: any): Promise<any> {
+    return this.makeRequest('/EventAttendees/FlagEventItemsAsAttendedOrNotAttended', 'POST', data);
+  }
+
+  // ===== INVOICE MANAGEMENT =====
+  async getInvoice(id: string): Promise<Invoice> {
+    return this.makeRequest(`/Invoice/${id}`);
+  }
+
+  async getInvoices(searchParams?: any): Promise<Invoice[]> {
+    const params = searchParams ? `?${new URLSearchParams(searchParams).toString()}` : '';
+    return this.makeRequest(`/Invoices${params}`);
+  }
+
+  async createInvoice(invoiceData: Partial<Invoice>): Promise<Invoice> {
+    return this.makeRequest('/Invoices', 'POST', invoiceData);
+  }
+
+  async updateInvoice(id: string, invoiceData: Partial<Invoice>): Promise<Invoice> {
+    return this.makeRequest(`/Invoice/${id}`, 'PUT', invoiceData);
+  }
+
+  async createInvoiceLineItem(lineItemData: any): Promise<any> {
+    return this.makeRequest('/InvoiceLineItems', 'POST', lineItemData);
+  }
+
+  // ===== PAYMENT MANAGEMENT =====
+  async createPayment(paymentData: Partial<Payment>): Promise<Payment> {
+    return this.makeRequest('/Payments', 'POST', paymentData);
+  }
+
+  async getPayment(id: string): Promise<Payment> {
+    return this.makeRequest(`/Payment/${id}`);
+  }
+
+  async getInvoicePayments(invoiceId: string): Promise<Payment[]> {
+    return this.makeRequest(`/Payments/${invoiceId}`);
+  }
+
+  async getPayments(searchParams?: any): Promise<Payment[]> {
+    const params = searchParams ? `?${new URLSearchParams(searchParams).toString()}` : '';
+    return this.makeRequest(`/Payments${params}`);
+  }
+
+  async getActivePaymentTypes(): Promise<any[]> {
+    return this.makeRequest('/PaymentTypes/ActivePaymentTypes');
+  }
+
+  // ===== BUSINESS LISTINGS =====
   async getBusinessListings(pageSize: number = 200, active: boolean = true): Promise<BusinessListing[]> {
     const params = `?Active=${active}&PageSize=${pageSize}&OrderBy=DateChanged&OrderByExpression=DESC&ObjectState=0`;
     return this.makeRequest(`/Listings${params}`);
@@ -281,181 +426,50 @@ class AtlasAPI {
     return this.makeRequest(`/ListingCategories?PageSize=${pageSize}&OrderBy=Category&PageNumber=${pageNumber}`);
   }
 
-  async getListingTypes(pageSize: number = 200): Promise<ListingType[]> {
+  async getListingTypes(pageSize: number = 200): Promise<any[]> {
     return this.makeRequest(`/ListingTypes?PageSize=${pageSize}`);
   }
 
-  async getCategoriesByStandardId(standardCategoryId: number): Promise<ListingCategory[]> {
-    return this.makeRequest(`/ListingCategories?PageSize=200&OrderBy=Category&StandardCategoryID=${standardCategoryId}`);
-  }
-
-  // Contact Management
+  // ===== CONTACT MANAGEMENT =====
   async getContacts(pageSize: number = 200): Promise<Contact[]> {
     return this.makeRequest(`/Contacts?PageSize=${pageSize}`);
   }
 
-  // Enhanced Committee Methods
-  async getActiveCommitteeMembers(committeeIds?: string[]): Promise<CommitteeMember[]> {
-    let endpoint = '/CommitteeMembers?Active=true';
-    if (committeeIds && committeeIds.length > 0) {
-      const committeeParams = committeeIds.map(id => `CommitteeIds=${id}`).join('&');
-      endpoint += `&${committeeParams}&PageSize=1000`;
-    }
-    return this.makeRequest(endpoint);
+  // ===== IMAGE MANAGEMENT =====
+  async getImages(searchParams?: any): Promise<Image[]> {
+    const params = searchParams ? `?${new URLSearchParams(searchParams).toString()}` : '';
+    return this.makeRequest(`/Images${params}`);
   }
 
-  async getCommitteeById(id: string): Promise<Committee> {
-    return this.makeRequest(`/Committee/${id}`);
-  }
-
-  // Utility Methods
-  async getNewMembers(daysBack: number = 7): Promise<Member[]> {
-    const members = await this.getMembers();
+  // ===== UTILITY METHODS =====
+  async getNewMembers(daysBack: number = 7): Promise<Profile[]> {
+    const response: any = await this.getProfiles();
+    // Handle both direct array and wrapped object responses
+    const members = Array.isArray(response) ? response : (response.data || response.profiles || []);
+    
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - daysBack);
     
-    return members.filter(member => 
-      member.JoinDate && new Date(member.JoinDate) > cutoffDate
+    return members.filter((member: any) => 
+      member.DateChanged && new Date(member.DateChanged) > cutoffDate
     );
   }
 
   async getCommitteeWithMembers(committeeId: string): Promise<{ committee: Committee, members: CommitteeMember[] }> {
-    const [committees, members] = await Promise.all([
+    const [committeesResponse, members] = await Promise.all([
       this.getCommittees(),
       this.getCommitteeMembersByCommitteeId(committeeId)
     ]);
     
-    const committee = committees.find(c => c.Id === committeeId);
+    // Handle both direct array and wrapped object responses
+    const committees = Array.isArray(committeesResponse) ? committeesResponse : ((committeesResponse as any).data || (committeesResponse as any).committees || []);
+    
+    const committee = committees.find((c: any) => c.Id === committeeId);
     if (!committee) {
       throw new Error(`Committee with ID ${committeeId} not found`);
     }
 
     return { committee, members };
-  }
-
-  // Enhanced Analysis Methods
-  async getMemberBusinessAnalysis(): Promise<any> {
-    const [members, listings, categories] = await Promise.all([
-      this.getMembers(),
-      this.getBusinessListings(),
-      this.getListingCategories()
-    ]);
-
-    // Map members to businesses based on ProfileId
-    const memberBusinessMap = new Map();
-    listings.forEach(listing => {
-      if (listing.ProfileId) {
-        memberBusinessMap.set(listing.ProfileId.toString(), listing);
-      }
-    });
-
-    // Create category lookup
-    const categoryMap = new Map();
-    categories.forEach(cat => {
-      categoryMap.set(cat.Id, cat.Category);
-    });
-
-    // Analyze member-business relationships
-    const memberAnalysis = members.map(member => {
-      const business = memberBusinessMap.get(member.Id);
-      return {
-        member: {
-          id: member.Id,
-          name: `${member.FirstName} ${member.LastName}`,
-          email: member.Email,
-          company: member.Company
-        },
-        business: business || null,
-        businessCategory: business && business.CategoryId 
-          ? categoryMap.get(business.CategoryId) || 'Unknown'
-          : null
-      };
-    });
-
-    // Industry distribution
-    const industryStats = memberAnalysis.reduce((acc, analysis) => {
-      const category = analysis.businessCategory || 'No Business Listed';
-      acc[category] = (acc[category] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-
-    return {
-      totalMembers: members.length,
-      membersWithBusinesses: memberAnalysis.filter(a => a.business).length,
-      memberAnalysis,
-      industryDistribution: industryStats,
-      topIndustries: Object.entries(industryStats)
-        .sort(([,a], [,b]) => (b as number) - (a as number))
-        .slice(0, 10)
-    };
-  }
-
-  async getCommitteeEngagementAnalysis(): Promise<any> {
-    const [committees, committeeMembers, events] = await Promise.all([
-      this.getCommittees(),
-      this.getActiveCommitteeMembers(),
-      this.getCommitteeEvents()
-    ]);
-
-    // Map events to attendance
-    const eventAttendance = events.map(event => ({
-      eventId: event.EventId,
-      eventName: event.EventName,
-      attendees: event.AttendingAttendees || 0,
-      pending: event.PendingAttendees || 0,
-      potential: event.PotentialAttendees || 0,
-      revenue: event.TotalInvoiced || 0
-    }));
-
-    // Committee member distribution
-    const committeeStats = committees.map(committee => {
-      const members = committeeMembers.filter(cm => cm.CommitteeId === committee.Id);
-      return {
-        committee: committee.Name,
-        memberCount: members.length,
-        isActive: committee.IsActive
-      };
-    });
-
-    return {
-      totalCommittees: committees.length,
-      activeCommittees: committees.filter(c => c.IsActive).length,
-      totalCommitteeMembers: committeeMembers.length,
-      committeeEvents: events.length,
-      totalEventAttendance: eventAttendance.reduce((sum, e) => sum + e.attendees, 0),
-      committeeStats,
-      eventAttendance
-    };
-  }
-
-  async getComprehensiveMemberIntelligence(): Promise<any> {
-    const [memberBusinessAnalysis, committeeEngagement, eventAnalysis] = await Promise.all([
-      this.getMemberBusinessAnalysis(),
-      this.getCommitteeEngagementAnalysis(),
-      this.getEventAttendanceAnalysis()
-    ]);
-
-    return {
-      summary: {
-        totalMembers: memberBusinessAnalysis.totalMembers,
-        membersWithBusinesses: memberBusinessAnalysis.membersWithBusinesses,
-        totalCommittees: committeeEngagement.totalCommittees,
-        totalEvents: eventAnalysis.totalEvents,
-        totalEventAttendance: eventAnalysis.totalAttendees,
-        totalEventRevenue: eventAnalysis.totalRevenue
-      },
-      memberBusinessAnalysis,
-      committeeEngagement,
-      eventAnalysis,
-      insights: {
-        memberBusinessPercentage: (memberBusinessAnalysis.membersWithBusinesses / memberBusinessAnalysis.totalMembers * 100).toFixed(1),
-        averageEventAttendance: eventAnalysis.averageAttendance.toFixed(1),
-        topBusinessCategories: memberBusinessAnalysis.topIndustries.slice(0, 5),
-        mostActiveEventTypes: Object.entries(eventAnalysis.eventsByType)
-          .sort(([,a], [,b]) => (b as number) - (a as number))
-          .slice(0, 5)
-      }
-    };
   }
 }
 
@@ -465,7 +479,7 @@ const atlasAPI = new AtlasAPI();
 // Create MCP server
 const server = new Server(
   {
-    name: 'atlas-mcp-server',
+    name: 'atlas-mcp-complete',
     version: '1.0.0',
   },
   {
@@ -475,13 +489,14 @@ const server = new Server(
   }
 );
 
-// List available tools
+// List available tools - ONLY REAL ATLAS ENDPOINTS
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
     tools: [
+      // ===== PROFILE MANAGEMENT =====
       {
-        name: 'get_members',
-        description: 'Get all member profiles from Atlas MemberClicks',
+        name: 'get_profiles',
+        description: 'Get all member profiles from Atlas',
         inputSchema: {
           type: 'object',
           properties: {
@@ -490,32 +505,59 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               description: 'Whether to restrict results to actual members only',
               default: true,
             },
+            pageSize: {
+              type: 'number',
+              description: 'Number of profiles to retrieve',
+              default: 100,
+            },
           },
         },
       },
       {
-        name: 'get_member_by_id',
-        description: 'Get a specific member by their ID',
+        name: 'get_profile_by_id',
+        description: 'Get a specific profile by ID',
         inputSchema: {
           type: 'object',
           properties: {
             id: {
               type: 'string',
-              description: 'The member ID to retrieve',
+              description: 'The profile ID to retrieve',
             },
           },
           required: ['id'],
         },
       },
       {
-        name: 'update_member_profile',
-        description: 'Update a member profile with new information',
+        name: 'create_profile',
+        description: 'Create a new profile',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            profileData: {
+              type: 'object',
+              description: 'The profile data for the new profile',
+              properties: {
+                FirstName: { type: 'string' },
+                LastName: { type: 'string' },
+                Email: { type: 'string' },
+                Phone: { type: 'string' },
+                Company: { type: 'string' },
+              },
+              required: ['FirstName', 'LastName', 'Email'],
+            },
+          },
+          required: ['profileData'],
+        },
+      },
+      {
+        name: 'update_profile',
+        description: 'Update an existing profile',
         inputSchema: {
           type: 'object',
           properties: {
             id: {
               type: 'string',
-              description: 'The member ID to update',
+              description: 'The profile ID to update',
             },
             profileData: {
               type: 'object',
@@ -525,43 +567,108 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           required: ['id', 'profileData'],
         },
       },
+
+      // ===== PROFILE CUSTOM FIELDS =====
       {
-        name: 'suspend_member',
-        description: 'Suspend a member account',
+        name: 'get_profile_custom_fields',
+        description: 'Get custom fields for a profile',
         inputSchema: {
           type: 'object',
           properties: {
-            id: {
+            profileId: {
               type: 'string',
-              description: 'The member ID to suspend',
+              description: 'The profile ID',
             },
           },
-          required: ['id'],
+          required: ['profileId'],
         },
       },
       {
-        name: 'add_member',
-        description: 'Add a new member to Atlas MemberClicks',
+        name: 'create_profile_custom_field',
+        description: 'Add a custom field to a profile',
         inputSchema: {
           type: 'object',
           properties: {
-            memberData: {
+            profileId: {
+              type: 'string',
+              description: 'The profile ID',
+            },
+            customFieldData: {
               type: 'object',
-              description: 'The member data for the new member',
-              properties: {
-                FirstName: { type: 'string' },
-                LastName: { type: 'string' },
-                Email: { type: 'string' },
-                Phone: { type: 'string' },
-                Company: { type: 'string' },
-                Title: { type: 'string' },
-              },
-              required: ['FirstName', 'LastName', 'Email'],
+              description: 'Custom field data',
             },
           },
-          required: ['memberData'],
+          required: ['profileId', 'customFieldData'],
         },
       },
+      {
+        name: 'update_profile_custom_field',
+        description: 'Update a profile custom field',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            profileId: {
+              type: 'string',
+              description: 'The profile ID',
+            },
+            customFieldId: {
+              type: 'string',
+              description: 'The custom field ID',
+            },
+            customFieldData: {
+              type: 'object',
+              description: 'Updated custom field data',
+            },
+          },
+          required: ['profileId', 'customFieldId', 'customFieldData'],
+        },
+      },
+
+      // ===== PROFILE MEMBER ACTIVITY =====
+      {
+        name: 'get_profile_member_activity',
+        description: 'Get member activity for a profile',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            profileId: {
+              type: 'string',
+              description: 'The profile ID',
+            },
+          },
+          required: ['profileId'],
+        },
+      },
+      {
+        name: 'create_member_activity',
+        description: 'Create a new member activity record',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            activityData: {
+              type: 'object',
+              description: 'Member activity data',
+            },
+          },
+          required: ['activityData'],
+        },
+      },
+      {
+        name: 'update_member_activity',
+        description: 'Update a member activity record',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            activityData: {
+              type: 'object',
+              description: 'Updated member activity data',
+            },
+          },
+          required: ['activityData'],
+        },
+      },
+
+      // ===== COMMITTEE MANAGEMENT =====
       {
         name: 'get_committees',
         description: 'Get all committees',
@@ -570,7 +677,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           properties: {
             pageSize: {
               type: 'number',
-              description: 'Number of committees to retrieve per page',
+              description: 'Number of committees to retrieve',
               default: 20,
             },
           },
@@ -578,31 +685,56 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'get_committee_members',
-        description: 'Get all committee members or members for a specific committee',
+        description: 'Get all committee members',
         inputSchema: {
           type: 'object',
-          properties: {
-            committeeId: {
-              type: 'string',
-              description: 'Optional committee ID to filter members by specific committee',
-            },
-          },
+          properties: {},
         },
       },
       {
-        name: 'get_committee_with_members',
-        description: 'Get a committee and all its members in one call',
+        name: 'get_committee_members_by_committee',
+        description: 'Get committee members for a specific committee',
         inputSchema: {
           type: 'object',
           properties: {
             committeeId: {
               type: 'string',
-              description: 'The committee ID to retrieve with members',
+              description: 'The committee ID',
             },
           },
           required: ['committeeId'],
         },
       },
+      {
+        name: 'get_committee_by_id',
+        description: 'Get a specific committee by ID',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'string',
+              description: 'The committee ID',
+            },
+          },
+          required: ['id'],
+        },
+      },
+      {
+        name: 'get_committee_with_members',
+        description: 'Get a committee and all its members',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            committeeId: {
+              type: 'string',
+              description: 'The committee ID',
+            },
+          },
+          required: ['committeeId'],
+        },
+      },
+
+      // ===== EVENT MANAGEMENT =====
       {
         name: 'get_events',
         description: 'Get all events',
@@ -611,48 +743,219 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           properties: {
             pageSize: {
               type: 'number',
-              description: 'Number of events to retrieve per page',
+              description: 'Number of events to retrieve',
               default: 100,
             },
-            upcomingOnly: {
-              type: 'boolean',
-              description: 'Whether to return only upcoming events',
-              default: false,
+          },
+        },
+      },
+
+      // ===== EVENT REGISTRATION SYSTEM =====
+      {
+        name: 'create_event_registration',
+        description: 'Create a new event registration',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            registrationData: {
+              type: 'object',
+              description: 'Event registration data',
+            },
+          },
+          required: ['registrationData'],
+        },
+      },
+      {
+        name: 'get_event_registration',
+        description: 'Get a specific event registration',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'string',
+              description: 'The registration ID',
+            },
+          },
+          required: ['id'],
+        },
+      },
+      {
+        name: 'get_event_registrations',
+        description: 'Get all registrations for an event',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            eventId: {
+              type: 'string',
+              description: 'The event ID',
+            },
+          },
+          required: ['eventId'],
+        },
+      },
+      {
+        name: 'get_event_attendees',
+        description: 'Get attendees for an event',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            eventId: {
+              type: 'string',
+              description: 'The event ID',
+            },
+          },
+          required: ['eventId'],
+        },
+      },
+      {
+        name: 'update_event_registration',
+        description: 'Update an event registration',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'string',
+              description: 'The registration ID',
+            },
+            registrationData: {
+              type: 'object',
+              description: 'Updated registration data',
+            },
+          },
+          required: ['id', 'registrationData'],
+        },
+      },
+
+      // ===== INVOICE MANAGEMENT =====
+      {
+        name: 'get_invoice',
+        description: 'Get a specific invoice',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'string',
+              description: 'The invoice ID',
+            },
+          },
+          required: ['id'],
+        },
+      },
+      {
+        name: 'get_invoices',
+        description: 'Search for invoices',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            searchParams: {
+              type: 'object',
+              description: 'Search parameters for invoice filtering',
             },
           },
         },
       },
       {
-        name: 'get_new_members',
-        description: 'Get members who joined recently',
+        name: 'create_invoice',
+        description: 'Create a new invoice',
         inputSchema: {
           type: 'object',
           properties: {
-            daysBack: {
-              type: 'number',
-              description: 'Number of days back to check for new members',
-              default: 7,
+            invoiceData: {
+              type: 'object',
+              description: 'Invoice data',
+            },
+          },
+          required: ['invoiceData'],
+        },
+      },
+      {
+        name: 'update_invoice',
+        description: 'Update an existing invoice',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'string',
+              description: 'The invoice ID',
+            },
+            invoiceData: {
+              type: 'object',
+              description: 'Updated invoice data',
+            },
+          },
+          required: ['id', 'invoiceData'],
+        },
+      },
+
+      // ===== PAYMENT MANAGEMENT =====
+      {
+        name: 'create_payment',
+        description: 'Create a new payment',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            paymentData: {
+              type: 'object',
+              description: 'Payment data',
+            },
+          },
+          required: ['paymentData'],
+        },
+      },
+      {
+        name: 'get_payment',
+        description: 'Get a specific payment',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'string',
+              description: 'The payment ID',
+            },
+          },
+          required: ['id'],
+        },
+      },
+      {
+        name: 'get_payments',
+        description: 'Search for payments',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            searchParams: {
+              type: 'object',
+              description: 'Search parameters for payment filtering',
             },
           },
         },
       },
       {
-        name: 'check_member_notifications',
-        description: 'Check for new members to trigger notifications',
+        name: 'get_invoice_payments',
+        description: 'Get payments for a specific invoice',
         inputSchema: {
           type: 'object',
           properties: {
-            daysBack: {
-              type: 'number',
-              description: 'Number of days back to check for new members',
-              default: 1,
+            invoiceId: {
+              type: 'string',
+              description: 'The invoice ID',
             },
           },
+          required: ['invoiceId'],
         },
       },
+      {
+        name: 'get_active_payment_types',
+        description: 'Get all active payment types',
+        inputSchema: {
+          type: 'object',
+          properties: {},
+        },
+      },
+
+      // ===== BUSINESS LISTINGS =====
       {
         name: 'get_business_listings',
-        description: 'Get business listings from Atlas directory',
+        description: 'Get business listings',
         inputSchema: {
           type: 'object',
           properties: {
@@ -702,6 +1005,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           },
         },
       },
+
+      // ===== CONTACT MANAGEMENT =====
       {
         name: 'get_contacts',
         description: 'Get contact information',
@@ -716,176 +1021,216 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           },
         },
       },
+
+      // ===== IMAGE MANAGEMENT =====
       {
-        name: 'get_events_with_attendance',
-        description: 'Get events with enhanced attendance data (Events-v4 endpoint)',
+        name: 'get_images',
+        description: 'Search for images',
         inputSchema: {
           type: 'object',
           properties: {
-            pageSize: {
+            searchParams: {
+              type: 'object',
+              description: 'Search parameters for image filtering',
+            },
+          },
+        },
+      },
+
+      // ===== UTILITY TOOLS =====
+      {
+        name: 'get_new_members',
+        description: 'Get members who joined recently',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            daysBack: {
               type: 'number',
-              description: 'Number of events to retrieve',
-              default: 100,
+              description: 'Number of days back to check for new members',
+              default: 7,
             },
           },
-        },
-      },
-      {
-        name: 'get_committee_events',
-        description: 'Get only committee meeting events',
-        inputSchema: {
-          type: 'object',
-          properties: {},
-        },
-      },
-      {
-        name: 'get_active_committee_members',
-        description: 'Get active committee members, optionally filtered by committee IDs',
-        inputSchema: {
-          type: 'object',
-          properties: {
-            committeeIds: {
-              type: 'array',
-              items: { type: 'string' },
-              description: 'Optional array of committee IDs to filter by',
-            },
-          },
-        },
-      },
-      {
-        name: 'get_committee_by_id',
-        description: 'Get detailed information about a specific committee',
-        inputSchema: {
-          type: 'object',
-          properties: {
-            id: {
-              type: 'string',
-              description: 'Committee ID to retrieve',
-            },
-          },
-          required: ['id'],
-        },
-      },
-      {
-        name: 'get_event_attendance_analysis',
-        description: 'Get comprehensive analysis of event attendance and engagement',
-        inputSchema: {
-          type: 'object',
-          properties: {},
-        },
-      },
-      {
-        name: 'get_member_business_analysis',
-        description: 'Analyze member-to-business relationships and industry distribution',
-        inputSchema: {
-          type: 'object',
-          properties: {},
-        },
-      },
-      {
-        name: 'get_committee_engagement_analysis',
-        description: 'Analyze committee membership and engagement patterns',
-        inputSchema: {
-          type: 'object',
-          properties: {},
-        },
-      },
-      {
-        name: 'get_comprehensive_member_intelligence',
-        description: 'Get complete member intelligence combining business data, committee engagement, and event analytics - perfect for demo queries',
-        inputSchema: {
-          type: 'object',
-          properties: {},
         },
       },
     ],
   };
 });
 
-// Handle tool calls
+// Handle tool calls - ONLY REAL ATLAS ENDPOINTS
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
 
   try {
     switch (name) {
-      case 'get_members': {
+      // ===== PROFILE MANAGEMENT =====
+      case 'get_profiles': {
         const restrictToMember = args && typeof args === 'object' && 'restrictToMember' in args 
           ? Boolean(args.restrictToMember) 
           : true;
-        const members = await atlasAPI.getMembers(restrictToMember);
+        const pageSize = args && typeof args === 'object' && 'pageSize' in args && typeof args.pageSize === 'number' 
+          ? args.pageSize 
+          : 100;
+        const profiles = await atlasAPI.getProfiles(restrictToMember, pageSize);
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(members, null, 2),
+              text: JSON.stringify(profiles, null, 2),
             },
           ],
         };
       }
 
-      case 'get_member_by_id': {
+      case 'get_profile_by_id': {
         if (!args || typeof args !== 'object' || !('id' in args) || typeof args.id !== 'string') {
-          throw new Error('Member ID is required');
+          throw new Error('Profile ID is required');
         }
-        const member = await atlasAPI.getMemberById(args.id);
+        const profile = await atlasAPI.getProfileById(args.id);
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(member, null, 2),
+              text: JSON.stringify(profile, null, 2),
             },
           ],
         };
       }
 
-      case 'update_member_profile': {
+      case 'create_profile': {
+        if (!args || typeof args !== 'object' || !('profileData' in args) || typeof args.profileData !== 'object') {
+          throw new Error('Profile data is required');
+        }
+        const newProfile = await atlasAPI.createProfile(args.profileData as Partial<Profile>);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Profile created successfully: ${JSON.stringify(newProfile, null, 2)}`,
+            },
+          ],
+        };
+      }
+
+      case 'update_profile': {
         if (!args || typeof args !== 'object' || !('id' in args) || typeof args.id !== 'string') {
-          throw new Error('Member ID is required');
+          throw new Error('Profile ID is required');
         }
         if (!('profileData' in args) || typeof args.profileData !== 'object') {
           throw new Error('Profile data is required');
         }
-        const updatedMember = await atlasAPI.updateMemberProfile(args.id, args.profileData as Partial<Member>);
+        const updatedProfile = await atlasAPI.updateProfile(args.id, args.profileData as Partial<Profile>);
         return {
           content: [
             {
               type: 'text',
-              text: `Member profile updated successfully: ${JSON.stringify(updatedMember, null, 2)}`,
+              text: `Profile updated successfully: ${JSON.stringify(updatedProfile, null, 2)}`,
             },
           ],
         };
       }
 
-      case 'suspend_member': {
-        if (!args || typeof args !== 'object' || !('id' in args) || typeof args.id !== 'string') {
-          throw new Error('Member ID is required');
+      // ===== PROFILE CUSTOM FIELDS =====
+      case 'get_profile_custom_fields': {
+        if (!args || typeof args !== 'object' || !('profileId' in args) || typeof args.profileId !== 'string') {
+          throw new Error('Profile ID is required');
         }
-        const result = await atlasAPI.suspendMember(args.id);
+        const customFields = await atlasAPI.getProfileCustomFields(args.profileId);
         return {
           content: [
             {
               type: 'text',
-              text: `Member suspended successfully: ${JSON.stringify(result, null, 2)}`,
+              text: JSON.stringify(customFields, null, 2),
             },
           ],
         };
       }
 
-      case 'add_member': {
-        if (!args || typeof args !== 'object' || !('memberData' in args) || typeof args.memberData !== 'object') {
-          throw new Error('Member data is required');
+      case 'create_profile_custom_field': {
+        if (!args || typeof args !== 'object' || !('profileId' in args) || typeof args.profileId !== 'string') {
+          throw new Error('Profile ID is required');
         }
-        const newMember = await atlasAPI.addMember(args.memberData as Partial<Member>);
+        if (!('customFieldData' in args) || typeof args.customFieldData !== 'object') {
+          throw new Error('Custom field data is required');
+        }
+        const customField = await atlasAPI.createProfileCustomField(args.profileId, args.customFieldData as Partial<CustomField>);
         return {
           content: [
             {
               type: 'text',
-              text: `New member added successfully: ${JSON.stringify(newMember, null, 2)}`,
+              text: `Custom field created successfully: ${JSON.stringify(customField, null, 2)}`,
             },
           ],
         };
       }
 
+      case 'update_profile_custom_field': {
+        if (!args || typeof args !== 'object' || !('profileId' in args) || typeof args.profileId !== 'string') {
+          throw new Error('Profile ID is required');
+        }
+        if (!('customFieldId' in args) || typeof args.customFieldId !== 'string') {
+          throw new Error('Custom field ID is required');
+        }
+        if (!('customFieldData' in args) || typeof args.customFieldData !== 'object') {
+          throw new Error('Custom field data is required');
+        }
+        const customField = await atlasAPI.updateProfileCustomField(args.profileId, args.customFieldId, args.customFieldData as Partial<CustomField>);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Custom field updated successfully: ${JSON.stringify(customField, null, 2)}`,
+            },
+          ],
+        };
+      }
+
+      // ===== PROFILE MEMBER ACTIVITY =====
+      case 'get_profile_member_activity': {
+        if (!args || typeof args !== 'object' || !('profileId' in args) || typeof args.profileId !== 'string') {
+          throw new Error('Profile ID is required');
+        }
+        const activity = await atlasAPI.getProfileMemberActivity(args.profileId);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(activity, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'create_member_activity': {
+        if (!args || typeof args !== 'object' || !('activityData' in args) || typeof args.activityData !== 'object') {
+          throw new Error('Activity data is required');
+        }
+        const activity = await atlasAPI.createMemberActivity(args.activityData as Partial<MemberActivity>);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Member activity created successfully: ${JSON.stringify(activity, null, 2)}`,
+            },
+          ],
+        };
+      }
+
+      case 'update_member_activity': {
+        if (!args || typeof args !== 'object' || !('activityData' in args) || typeof args.activityData !== 'object') {
+          throw new Error('Activity data is required');
+        }
+        const activity = await atlasAPI.updateMemberActivity(args.activityData as Partial<MemberActivity>);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Member activity updated successfully: ${JSON.stringify(activity, null, 2)}`,
+            },
+          ],
+        };
+      }
+
+      // ===== COMMITTEE MANAGEMENT =====
       case 'get_committees': {
         const pageSize = args && typeof args === 'object' && 'pageSize' in args && typeof args.pageSize === 'number' 
           ? args.pageSize 
@@ -902,17 +1247,42 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case 'get_committee_members': {
-        const committeeId = args && typeof args === 'object' && 'committeeId' in args && typeof args.committeeId === 'string'
-          ? args.committeeId
-          : undefined;
-        const members = committeeId
-          ? await atlasAPI.getCommitteeMembersByCommitteeId(committeeId)
-          : await atlasAPI.getCommitteeMembers();
+        const members = await atlasAPI.getCommitteeMembers();
         return {
           content: [
             {
               type: 'text',
               text: JSON.stringify(members, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'get_committee_members_by_committee': {
+        if (!args || typeof args !== 'object' || !('committeeId' in args) || typeof args.committeeId !== 'string') {
+          throw new Error('Committee ID is required');
+        }
+        const members = await atlasAPI.getCommitteeMembersByCommitteeId(args.committeeId);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(members, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'get_committee_by_id': {
+        if (!args || typeof args !== 'object' || !('id' in args) || typeof args.id !== 'string') {
+          throw new Error('Committee ID is required');
+        }
+        const committee = await atlasAPI.getCommitteeById(args.id);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(committee, null, 2),
             },
           ],
         };
@@ -933,16 +1303,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       }
 
+      // ===== EVENT MANAGEMENT =====
       case 'get_events': {
         const pageSize = args && typeof args === 'object' && 'pageSize' in args && typeof args.pageSize === 'number' 
           ? args.pageSize 
           : 100;
-        const upcomingOnly = args && typeof args === 'object' && 'upcomingOnly' in args 
-          ? Boolean(args.upcomingOnly) 
-          : false;
-        const events = upcomingOnly
-          ? await atlasAPI.getUpcomingEvents()
-          : await atlasAPI.getEvents(pageSize);
+        const events = await atlasAPI.getEvents(pageSize);
         return {
           content: [
             {
@@ -953,51 +1319,224 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       }
 
-      case 'get_new_members': {
-        const daysBack = args && typeof args === 'object' && 'daysBack' in args && typeof args.daysBack === 'number' 
-          ? args.daysBack 
-          : 7;
-        const newMembers = await atlasAPI.getNewMembers(daysBack);
+
+      // ===== EVENT REGISTRATION SYSTEM =====
+      case 'create_event_registration': {
+        if (!args || typeof args !== 'object' || !('registrationData' in args) || typeof args.registrationData !== 'object') {
+          throw new Error('Registration data is required');
+        }
+        const registration = await atlasAPI.createEventRegistration(args.registrationData as Partial<Registration>);
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(newMembers, null, 2),
+              text: `Event registration created successfully: ${JSON.stringify(registration, null, 2)}`,
             },
           ],
         };
       }
 
-      case 'check_member_notifications': {
-        const daysBack = args && typeof args === 'object' && 'daysBack' in args && typeof args.daysBack === 'number' 
-          ? args.daysBack 
-          : 1;
-        const newMembers = await atlasAPI.getNewMembers(daysBack);
-        const notificationMessage = newMembers.length > 0
-          ? `Found ${newMembers.length} new member(s) in the last ${daysBack} day(s). Ready to trigger workflows for profile enrichment, social media posting, and email notifications.`
-          : `No new members found in the last ${daysBack} day(s).`;
-        
+      case 'get_event_registration': {
+        if (!args || typeof args !== 'object' || !('id' in args) || typeof args.id !== 'string') {
+          throw new Error('Registration ID is required');
+        }
+        const registration = await atlasAPI.getEventRegistration(args.id);
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify({
-                message: notificationMessage,
-                newMembersCount: newMembers.length,
-                newMembers: newMembers,
-                suggestedActions: newMembers.length > 0 ? [
-                  'Enrich profiles with Clay',
-                  'Store data in Airtable',
-                  'Create social media posts',
-                  'Draft CEO welcome email',
-                  'Send review request'
-                ] : []
-              }, null, 2),
+              text: JSON.stringify(registration, null, 2),
             },
           ],
         };
       }
 
+      case 'get_event_registrations': {
+        if (!args || typeof args !== 'object' || !('eventId' in args) || typeof args.eventId !== 'string') {
+          throw new Error('Event ID is required');
+        }
+        const registrations = await atlasAPI.getEventRegistrations(args.eventId);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(registrations, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'get_event_attendees': {
+        if (!args || typeof args !== 'object' || !('eventId' in args) || typeof args.eventId !== 'string') {
+          throw new Error('Event ID is required');
+        }
+        const attendees = await atlasAPI.getEventAttendees(args.eventId);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(attendees, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'update_event_registration': {
+        if (!args || typeof args !== 'object' || !('id' in args) || typeof args.id !== 'string') {
+          throw new Error('Registration ID is required');
+        }
+        if (!('registrationData' in args) || typeof args.registrationData !== 'object') {
+          throw new Error('Registration data is required');
+        }
+        const registration = await atlasAPI.updateEventRegistration(args.id, args.registrationData as Partial<Registration>);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Event registration updated successfully: ${JSON.stringify(registration, null, 2)}`,
+            },
+          ],
+        };
+      }
+
+      // ===== INVOICE MANAGEMENT =====
+      case 'get_invoice': {
+        if (!args || typeof args !== 'object' || !('id' in args) || typeof args.id !== 'string') {
+          throw new Error('Invoice ID is required');
+        }
+        const invoice = await atlasAPI.getInvoice(args.id);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(invoice, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'get_invoices': {
+        const searchParams = args && typeof args === 'object' && 'searchParams' in args && typeof args.searchParams === 'object' 
+          ? args.searchParams 
+          : undefined;
+        const invoices = await atlasAPI.getInvoices(searchParams);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(invoices, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'create_invoice': {
+        if (!args || typeof args !== 'object' || !('invoiceData' in args) || typeof args.invoiceData !== 'object') {
+          throw new Error('Invoice data is required');
+        }
+        const invoice = await atlasAPI.createInvoice(args.invoiceData as Partial<Invoice>);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Invoice created successfully: ${JSON.stringify(invoice, null, 2)}`,
+            },
+          ],
+        };
+      }
+
+      case 'update_invoice': {
+        if (!args || typeof args !== 'object' || !('id' in args) || typeof args.id !== 'string') {
+          throw new Error('Invoice ID is required');
+        }
+        if (!('invoiceData' in args) || typeof args.invoiceData !== 'object') {
+          throw new Error('Invoice data is required');
+        }
+        const invoice = await atlasAPI.updateInvoice(args.id, args.invoiceData as Partial<Invoice>);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Invoice updated successfully: ${JSON.stringify(invoice, null, 2)}`,
+            },
+          ],
+        };
+      }
+
+      // ===== PAYMENT MANAGEMENT =====
+      case 'create_payment': {
+        if (!args || typeof args !== 'object' || !('paymentData' in args) || typeof args.paymentData !== 'object') {
+          throw new Error('Payment data is required');
+        }
+        const payment = await atlasAPI.createPayment(args.paymentData as Partial<Payment>);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Payment created successfully: ${JSON.stringify(payment, null, 2)}`,
+            },
+          ],
+        };
+      }
+
+      case 'get_payment': {
+        if (!args || typeof args !== 'object' || !('id' in args) || typeof args.id !== 'string') {
+          throw new Error('Payment ID is required');
+        }
+        const payment = await atlasAPI.getPayment(args.id);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(payment, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'get_payments': {
+        const searchParams = args && typeof args === 'object' && 'searchParams' in args && typeof args.searchParams === 'object' 
+          ? args.searchParams 
+          : undefined;
+        const payments = await atlasAPI.getPayments(searchParams);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(payments, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'get_invoice_payments': {
+        if (!args || typeof args !== 'object' || !('invoiceId' in args) || typeof args.invoiceId !== 'string') {
+          throw new Error('Invoice ID is required');
+        }
+        const payments = await atlasAPI.getInvoicePayments(args.invoiceId);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(payments, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'get_active_payment_types': {
+        const paymentTypes = await atlasAPI.getActivePaymentTypes();
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(paymentTypes, null, 2),
+            },
+          ],
+        };
+      }
+
+      // ===== BUSINESS LISTINGS =====
       case 'get_business_listings': {
         const pageSize = args && typeof args === 'object' && 'pageSize' in args && typeof args.pageSize === 'number' 
           ? args.pageSize : 200;
@@ -1044,6 +1583,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       }
 
+      // ===== CONTACT MANAGEMENT =====
       case 'get_contacts': {
         const pageSize = args && typeof args === 'object' && 'pageSize' in args && typeof args.pageSize === 'number' 
           ? args.pageSize : 200;
@@ -1058,105 +1598,33 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       }
 
-      case 'get_events_with_attendance': {
-        const pageSize = args && typeof args === 'object' && 'pageSize' in args && typeof args.pageSize === 'number' 
-          ? args.pageSize : 100;
-        const events = await atlasAPI.getEventsV4(pageSize);
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(events, null, 2),
-            },
-          ],
-        };
-      }
-
-      case 'get_committee_events': {
-        const events = await atlasAPI.getCommitteeEvents();
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(events, null, 2),
-            },
-          ],
-        };
-      }
-
-      case 'get_active_committee_members': {
-        const committeeIds = args && typeof args === 'object' && 'committeeIds' in args && Array.isArray(args.committeeIds)
-          ? args.committeeIds as string[]
+      // ===== IMAGE MANAGEMENT =====
+      case 'get_images': {
+        const searchParams = args && typeof args === 'object' && 'searchParams' in args && typeof args.searchParams === 'object' 
+          ? args.searchParams 
           : undefined;
-        const members = await atlasAPI.getActiveCommitteeMembers(committeeIds);
+        const images = await atlasAPI.getImages(searchParams);
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(members, null, 2),
+              text: JSON.stringify(images, null, 2),
             },
           ],
         };
       }
 
-      case 'get_committee_by_id': {
-        if (!args || typeof args !== 'object' || !('id' in args) || typeof args.id !== 'string') {
-          throw new Error('Committee ID is required');
-        }
-        const committee = await atlasAPI.getCommitteeById(args.id);
+      // ===== UTILITY TOOLS =====
+      case 'get_new_members': {
+        const daysBack = args && typeof args === 'object' && 'daysBack' in args && typeof args.daysBack === 'number' 
+          ? args.daysBack 
+          : 7;
+        const newMembers = await atlasAPI.getNewMembers(daysBack);
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(committee, null, 2),
-            },
-          ],
-        };
-      }
-
-      case 'get_event_attendance_analysis': {
-        const analysis = await atlasAPI.getEventAttendanceAnalysis();
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(analysis, null, 2),
-            },
-          ],
-        };
-      }
-
-      case 'get_member_business_analysis': {
-        const analysis = await atlasAPI.getMemberBusinessAnalysis();
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(analysis, null, 2),
-            },
-          ],
-        };
-      }
-
-      case 'get_committee_engagement_analysis': {
-        const analysis = await atlasAPI.getCommitteeEngagementAnalysis();
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(analysis, null, 2),
-            },
-          ],
-        };
-      }
-
-      case 'get_comprehensive_member_intelligence': {
-        const intelligence = await atlasAPI.getComprehensiveMemberIntelligence();
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(intelligence, null, 2),
+              text: JSON.stringify(newMembers, null, 2),
             },
           ],
         };
@@ -1181,7 +1649,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error('Atlas MemberClicks MCP Server running on stdio');
+  console.error('Atlas MCP Complete Server running on stdio');
 }
 
 main().catch((error) => {

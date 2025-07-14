@@ -1,31 +1,40 @@
 {
-  "name": "atlas-mcp-server",
+  "name": "carls-bad-mcp-server",
   "version": "1.0.0",
-  "description": "MCP Server for Atlas MemberClicks API integration",
+  "description": "Carl's Bad MCP Server - AI-powered chamber management for Carlsbad Chamber of Commerce",
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "tsc && node dist/server.js",
+    "web": "node web-server.js",
     "clean": "rm -rf dist",
     "rebuild": "npm run clean && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "mcp",
-    "atlas",
+    "carlsbad",
+    "chamber",
     "memberclicks",
-    "api",
+    "ai",
+    "conversational",
     "server"
   ],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@copilotkit/react-core": "^1.9.1",
+    "@copilotkit/react-textarea": "^1.9.1",
+    "@copilotkit/react-ui": "^1.9.1",
+    "@copilotkit/runtime": "^1.9.1",
     "@modelcontextprotocol/sdk": "^1.13.3",
     "@types/node": "^24.0.10",
     "dotenv": "^17.0.1",
+    "express": "^4.21.2",
     "node-fetch": "^3.3.2",
+    "openai": "^4.104.0",
     "typescript": "^5.8.3"
   }
 }

@@ -1,0 +1,1880 @@
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+LLM or Agent Framework
+What is CopilotKit?
+Getting Started
+LLM Quickstart
+CoAgent Quickstart
+CopilotKit Feature Overviews
+Agentic Chat UI
+Custom Look and Feel
+Copilot Suggestions
+Human in the Loop (HITL)
+Generative UI
+Frontend Actions
+Backend Actions
+Shared State
+Learning
+Tutorial: AI Todo App
+Tutorial: AI Powered Textarea
+Tutorial: Research ANA
+Tutorial: AI Travel App
+Video: Research Canvas
+Cookbook: State Machines
+Troubleshooting
+Troubleshooting Copilots
+Other
+Contributing
+Anonymous Telemetry
+On this page
+What is CopilotKit?
+The Agentic Application Framework: Open source framework and hosted service for AI-assisted applications.
+CopilotKit is the easiest way to add AI copilots - intelligent, context-aware assistants - into your app.
+CopilotKit connects your app's logic, state, and user context to the AI agents that deliver the animated and interactive part of your app experience — across both embedded UIs and fully headless interfaces. It gives you the tools to build, deploy, and monitor AI-assisted features that feel intuitive, helpful, and deeply integrated.
+By decoupling your application from any specific model or agent architecture, CopilotKit gives you the freedom to evolve your AI stack without rethinking your user experience.
+Want to build your own travel app?
+Check out our Travel App Tutorial to see how to build your own travel app with CopilotKit.
+Get Started Now
+Quickstart
+Start with an LLM
+or Agent Framework
+Choose Agent or LLM
+Direct to LLM
+LangGraph
+Mastra
+LlamaIndex
+Agno
+CrewAI Flows
+CrewAI Crews
+AG2
+CLI
+Bootstrap your NextJS
+application with CopilotKit
+npx copilotkit@latest init
+Platform
+Start the easiest way
+with our hosted service
+CopilotKit Platform
+Integrations
+CopilotKit works with any LLM or agent framework. Choose an integration to see the full feature set.
+Direct to LLM
+LangGraph
+Mastra
+CrewAI Crews
+CrewAI Flows
+Agno
+LlamaIndex
+AutoGen2
+Key Features
+Learn why CopilotKit is used by thousands of developers around the world.
+Designed for Agentic Applications
+Context Injection
+AGUI Protocol
+MCP Support
+UI Integration
+Headless Mode
+LLM & Agent Framework Agnostic
+Hosted or Self-Hosted
+Full Flexibility
+Real-Time Interaction
+Unified DevX
+Production-Ready
+Cloud or OSS
+Community & Extensibility
+Observability & Debugging
+Composable Architecture
+Next
+LLM Quickstart
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+LLM or Agent Framework
+What is CopilotKit?
+Getting Started
+LLM Quickstart
+CoAgent Quickstart
+CopilotKit Feature Overviews
+Agentic Chat UI
+Custom Look and Feel
+Customize UI
+Prebuilt Copilot UI
+Styling Copilot UI
+Custom Sub-Components
+Fully Headless UI
+Markdown rendering
+Copilot Suggestions
+Human in the Loop (HITL)
+Generative UI
+Frontend Actions
+Backend Actions
+Shared State
+Learning
+Tutorial: AI Todo App
+Tutorial: AI Powered Textarea
+Tutorial: Research ANA
+Tutorial: AI Travel App
+Video: Research Canvas
+Cookbook: State Machines
+Troubleshooting
+Troubleshooting Copilots
+Other
+Contributing
+Anonymous Telemetry
+On this page
+Customize UI
+Customize the look, feel, and functionality of CopilotKit's UI components.
+CopilotKit offers a variety of ways to create a UI interface for your Copilots and CoAgents. This ranges from using our built-in UI components to fully customizing the UI with headless UI.
+Prebuilt Copilot UI
+Get started quickly with CopilotKit's ready-to-use UI components.
+Styling Copilot UI
+Customize the appearance of CopilotKit's pre-built components with your own styles.
+Custom Components
+Replace the Copilot UI components with your own while keeping the core functionality.
+Fully Custom UI
+Build your UI from scratch using CopilotKit's hooks and core functionality.
+Markdown Rendering
+Modify Copilotkit's use of markdown to display elements within the assistant arrow text, such as source citing and reasoning steps.
+Previous
+Agentic Chat UI
+Next
+Customize UI
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+LLM or Agent Framework
+What is CopilotKit?
+Getting Started
+LLM Quickstart
+CoAgent Quickstart
+CopilotKit Feature Overviews
+Agentic Chat UI
+Custom Look and Feel
+Copilot Suggestions
+Human in the Loop (HITL)
+Generative UI
+Frontend Actions
+Backend Actions
+Shared State
+Learning
+Tutorial: AI Todo App
+Tutorial: AI Powered Textarea
+Tutorial: Research ANA
+Tutorial: AI Travel App
+Video: Research Canvas
+Cookbook: State Machines
+Troubleshooting
+Troubleshooting Copilots
+Other
+Contributing
+Anonymous Telemetry
+On this page
+Human in the Loop (HITL)
+Allow your agent and users to collaborate on complex tasks.
+This video shows an example of our AI Travel App using HITL to get user feedback.
+What is Human-in-the-Loop (HITL)?
+Human-in-the-loop (HITL) allows agents to request human input or approval during execution, making AI systems more reliable and trustworthy. This pattern is essential when building AI applications that need to handle complex decisions or actions that require human judgment.
+When should I use this?
+HITL combines the efficiency of AI with human judgment, creating a system that's both powerful and reliable. The key advantages include:
+Quality Control: Human oversight at critical decision points
+Edge Cases: Graceful handling of low-confidence situations
+Expert Input: Leverage human expertise when needed
+Reliability: More robust system for real-world use
+Ready to Implement Human in the Loop?
+Human in the Loop can be implemented with any integration.
+Choose your integration to see specific implementation guides and examples.
+LangGraph
+Mastra
+CrewAI Crews
+CrewAI Flows
+Agno
+LlamaIndex
+AutoGen2
+Previous
+Copilot Suggestions
+Next
+Generative UI
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+LangGraph
+What is CopilotKit?
+Getting Started
+LLM Quickstart
+CoAgent Quickstart
+CopilotKit Feature Overviews
+Agentic Chat UI
+Custom Look and Feel
+Copilot Suggestions
+Human in the Loop (HITL)
+Generative UI
+Frontend Actions
+Backend Actions
+Shared State
+Learning
+Tutorial: AI Todo App
+Tutorial: AI Powered Textarea
+Tutorial: Research ANA
+Tutorial: AI Travel App
+Step 1: Checkout the repo
+Step 2: LangGraph Agent
+Step 3: Setup CopilotKit
+Step 4: Integrate the Agent
+Step 5: Stream Progress
+Step 6: Human in the Loop
+Next Steps
+Video: Research Canvas
+Cookbook: State Machines
+Troubleshooting
+Troubleshooting Copilots
+Other
+Contributing
+Anonymous Telemetry
+On this page
+Overview
+AI Travel Agentic Copilot Tutorial
+Time to complete: 20 minutes
+Difficulty: Medium
+What you'll learn
+In this tutorial, you will take a simple travel application and supercharge it with an agentic copilot. You will learn:
+💡 What an agentic copilot is and how it can be used to enhance your application
+💡 How to use useCoAgent to allow for shared state between your UI and agent execution
+💡 How to use useCoAgentStateRender to implement human-in-the-loop workflows
+💡 How to render intermediate states of your agent's execution
+View on GitHub
+View live app
+In the next step, we'll checkout the repo, install dependencies, and start the project locally.
+Previous
+Next Steps
+Next
+Step 1: Checkout the repo
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+LLM or Agent Framework
+What is CopilotKit?
+Getting Started
+LLM Quickstart
+CoAgent Quickstart
+CopilotKit Feature Overviews
+Agentic Chat UI
+Custom Look and Feel
+Customize UI
+Prebuilt Copilot UI
+Styling Copilot UI
+Custom Sub-Components
+Fully Headless UI
+Markdown rendering
+Copilot Suggestions
+Human in the Loop (HITL)
+Generative UI
+Frontend Actions
+Backend Actions
+Shared State
+Learning
+Tutorial: AI Todo App
+Tutorial: AI Powered Textarea
+Tutorial: Research ANA
+Tutorial: AI Travel App
+Video: Research Canvas
+Cookbook: State Machines
+Troubleshooting
+Troubleshooting Copilots
+Other
+Contributing
+Anonymous Telemetry
+On this page
+Custom Look and Feel
+Prebuilt Copilot UI
+First, import the default styles in your root component (typically layout.tsx) :
+import "@copilotkit/react-ui/styles.css";
+Copilot UI ships with a number of built-in UI patterns, choose whichever one you like.
+CopilotChat
+CopilotSidebar
+CopilotPopup
+Headless UI
+CopilotChat is a flexible chat interface component that can be placed anywhere in your app and can be resized as you desire.
+import { CopilotChat } from "@copilotkit/react-ui";
+ 
+export function YourComponent() {
+ return (
+ <CopilotChat
+ instructions={"You are assisting the user as best as you can. Answer in the best way possible given the data you have."}
+ labels={{
+ title: "Your Assistant",
+ initial: "Hi! 👋 How can I assist you today?",
+ }}
+ />
+ );
+}
+Previous
+Customize UI
+Next
+Styling Copilot UI
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+LangGraph
+What is CopilotKit?
+Getting Started
+LLM Quickstart
+CoAgent Quickstart
+CopilotKit Feature Overviews
+Agentic Chat UI
+Custom Look and Feel
+Copilot Suggestions
+Human in the Loop (HITL)
+Generative UI
+Frontend Actions
+Backend Actions
+Shared State
+Learning
+Tutorial: AI Todo App
+Tutorial: AI Powered Textarea
+Tutorial: Research ANA
+Tutorial: AI Travel App
+Step 1: Checkout the repo
+Step 2: LangGraph Agent
+Step 3: Setup CopilotKit
+Step 4: Integrate the Agent
+Step 5: Stream Progress
+Step 6: Human in the Loop
+Next Steps
+Video: Research Canvas
+Cookbook: State Machines
+Troubleshooting
+Troubleshooting Copilots
+Other
+Contributing
+Anonymous Telemetry
+On this page
+Tutorial: AI Travel App
+Step 1: Checkout the repo
+Checkout the starting branch
+We'll be working with the CopilotKit repository, specifically using a branch called coagents-travel-tutorial-start. This branch contains the starting code for our travel app tutorial.
+git clone -b coagents-travel-tutorial-start https://github.com/CopilotKit/CopilotKit.git
+cd CopilotKit
+The tutorial code is located in the examples/coagents-travel directory, which contains:
+ui/: A NextJS application where we'll integrate our LangGraph agent
+agent/: A Python-based LangGraph agent that we'll be enhancing
+Go ahead and navigate to the example directory:
+cd examples/coagents-travel
+Install dependencies
+First, let's set up the NextJS application. Navigate to the ui directory and install the dependencies:
+cd ui
+pnpm install
+Start the project
+Launch the development server:
+pnpm run dev
+Visit http://localhost:3000 to see the travel app in action. Take some time to explore the interface and familiarize yourself with its features.
+Next, let's understand the LangGraph agent and how it works.
+Previous
+Overview
+Next
+Step 2: LangGraph Agent
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+LLM or Agent Framework
+API Reference
+UI Components
+Chat Components
+CopilotTextarea
+CopilotKit
+Hooks
+useCopilotReadable
+useCopilotAction
+useCopilotAdditionalInstructions
+useCopilotChat
+useCopilotChatSuggestions
+useCoAgent
+useCoAgentStateRender
+useLangGraphInterrupt
+Classes
+CopilotRuntime
+LLM Adapters
+CopilotTask
+SDKs
+Python
+JavaScript
+On this page
+API Reference
+API Reference for CopilotKit's components, classes and hooks.
+UI Components
+See the list of all available UI components in CopilotKit.
+Hooks
+See the list of all available hooks in CopilotKit.
+Classes
+See the list of all available classes in CopilotKit.
+LLM Adapters
+See the list of all available LLM Adapters in CopilotKit.
+SDKs
+Python and JavaScript SDKs for CopilotKit.
+Next
+All Chat Components
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+Direct to LLM
+Getting Started
+Quickstart
+Self Hosting (Copilot Runtime)
+Custom Look and Feel
+Customize UI
+Prebuilt Copilot UI
+Styling Copilot UI
+Custom Sub-Components
+Fully Headless UI
+Markdown rendering
+Agent Interaction
+Copilot Suggestions
+Human in the Loop (HITL)
+Customize AI Behavior
+Actions & Integration
+Frontend Actions
+Backend Actions & Agents
+Generative UI
+Connecting Your Data
+Authenticated Actions
+Advanced Features
+Bring Your Own LLM
+Connect to MCP Servers
+Guardrails
+Saving and restoring messages
+Legacy Features
+Copilot Textarea
+Tutorials
+Tutorial: AI Todo App
+Tutorial: AI Powered Textarea
+Cookbook
+Cookbook: State Machines
+Troubleshooting Copilots
+Common Copilot Issues
+Migrate to 1.8.2
+Other
+Contributing
+Anonymous Telemetry
+Observability
+On this page
+Self Hosting (Copilot Runtime)
+Learn how to self-host the Copilot Runtime.
+The Copilot Runtime is the back-end component of CopilotKit, handling the communication with LLM, message history, state and more.
+You may choose to self-host the Copilot Runtime, or use Copilot Cloud (recommended).
+LLM
+Copilot Runtime
+@copilotkit/react-core
+LLM
+Copilot Runtime
+@copilotkit/react-core
+"Hey, my name is Uli."
+Request
+Response
+"Hello Uli, how can I help you?"
+Integration
+Step 1: Create an Endpoint
+Choose your provider:
+OpenAI
+If you are planning to use a single LangGraph agent in agent-lock mode as your agentic backend, your LLM adapter will only be used for peripherals such as suggestions, etc.
+If you are not sure yet, simply ignore this note.
+Add your API key
+Next, add your API key to your .env file in the root of your project (unless you prefer to provide it directly to the client):
+.env
+OPENAI_API_KEY=your_api_key_here
+Please note that the code below uses GPT-4o, which requires a paid OpenAI API key. If you are using a free OpenAI API key, change the model to a different option such as gpt-3.5-turbo.
+Setup the Runtime Endpoint
+Serverless Function Timeouts
+When deploying to serverless platforms (Vercel, AWS Lambda, etc.), be aware that default function timeouts may be too short for CopilotKit's streaming responses:
+Vercel defaults: 10s (Hobby), 15s (Pro)
+AWS Lambda default: 3s
+Solution options:
+Increase function timeout:
+// vercel.json
+{
+ "functions": {
+ "api/copilotkit/**/*": {
+ "maxDuration": 60
+ }
+ }
+}
+Use Copilot Cloud to avoid timeout issues entirely
+Next.js App Router
+Next.js Pages Router
+Node.js Express
+Node.js HTTP
+NestJS
+Create a new route to handle the /api/copilotkit endpoint.
+app/api/copilotkit/route.ts
+import {
+ CopilotRuntime,
+ OpenAIAdapter,
+ copilotRuntimeNextJSAppRouterEndpoint,
+} from '@copilotkit/runtime';
+import { NextRequest } from 'next/server';
+ 
+const serviceAdapter = new OpenAIAdapter();
+const runtime = new CopilotRuntime();
+ 
+export const POST = async (req: NextRequest) => {
+ const { handleRequest } = copilotRuntimeNextJSAppRouterEndpoint({
+ runtime,
+ serviceAdapter,
+ endpoint: '/api/copilotkit',
+ });
+ 
+ return handleRequest(req);
+};
+Your Copilot Runtime endpoint should be available at http://localhost:3000/api/copilotkit.
+Step 2: Configure the <CopilotKit> Provider
+layout.tsx
+import "./globals.css";
+import { ReactNode } from "react";
+import { CopilotKit } from "@copilotkit/react-core"; 
+ 
+export default function RootLayout({ children }: { children: ReactNode }) {
+ return (
+ <html lang="en">
+ <body> 
+ {/* Make sure to use the URL you configured in the previous step */} // [!code highlight:4]
+ <CopilotKit runtimeUrl="/api/copilotkit"> 
+ {children}
+ </CopilotKit>
+ </body>
+ </html>
+ );
+}
+Next Steps
+CopilotRuntime Reference
+LLM Adapters
+Previous
+Quickstart
+Next
+Customize UI
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+Direct to LLM
+Getting Started
+Quickstart
+Self Hosting (Copilot Runtime)
+Custom Look and Feel
+Customize UI
+Prebuilt Copilot UI
+Styling Copilot UI
+Custom Sub-Components
+Fully Headless UI
+Markdown rendering
+Agent Interaction
+Copilot Suggestions
+Human in the Loop (HITL)
+Customize AI Behavior
+Actions & Integration
+Frontend Actions
+Backend Actions & Agents
+Generative UI
+Connecting Your Data
+Authenticated Actions
+Advanced Features
+Bring Your Own LLM
+Connect to MCP Servers
+Guardrails
+Saving and restoring messages
+Legacy Features
+Copilot Textarea
+Tutorials
+Tutorial: AI Todo App
+Tutorial: AI Powered Textarea
+Cookbook
+Cookbook: State Machines
+Troubleshooting Copilots
+Common Copilot Issues
+Migrate to 1.8.2
+Other
+Contributing
+Anonymous Telemetry
+Observability
+On this page
+Customize UI
+Customize the look, feel, and functionality of CopilotKit's UI components.
+CopilotKit offers a variety of ways to create a UI interface for your Copilots and CoAgents. This ranges from using our built-in UI components to fully customizing the UI with headless UI.
+Prebuilt Copilot UI
+Get started quickly with CopilotKit's ready-to-use UI components.
+Styling Copilot UI
+Customize the appearance of CopilotKit's pre-built components with your own styles.
+Custom Components
+Replace the Copilot UI components with your own while keeping the core functionality.
+Fully Custom UI
+Build your UI from scratch using CopilotKit's hooks and core functionality.
+Markdown Rendering
+Modify Copilotkit's use of markdown to display elements within the assistant arrow text, such as source citing and reasoning steps.
+Previous
+Self Hosting (Copilot Runtime)
+Next
+Prebuilt Copilot UI
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+Direct to LLM
+Getting Started
+Quickstart
+Self Hosting (Copilot Runtime)
+Custom Look and Feel
+Customize UI
+Prebuilt Copilot UI
+Styling Copilot UI
+Custom Sub-Components
+Fully Headless UI
+Markdown rendering
+Agent Interaction
+Copilot Suggestions
+Human in the Loop (HITL)
+Customize AI Behavior
+Actions & Integration
+Frontend Actions
+Backend Actions & Agents
+Generative UI
+Connecting Your Data
+Authenticated Actions
+Advanced Features
+Bring Your Own LLM
+Connect to MCP Servers
+Guardrails
+Saving and restoring messages
+Legacy Features
+Copilot Textarea
+Tutorials
+Tutorial: AI Todo App
+Tutorial: AI Powered Textarea
+Cookbook
+Cookbook: State Machines
+Troubleshooting Copilots
+Common Copilot Issues
+Migrate to 1.8.2
+Other
+Contributing
+Anonymous Telemetry
+Observability
+On this page
+Prebuilt Copilot UI
+First, import the default styles in your root component (typically layout.tsx) :
+import "@copilotkit/react-ui/styles.css";
+Copilot UI ships with a number of built-in UI patterns, choose whichever one you like.
+CopilotChat
+CopilotSidebar
+CopilotPopup
+Headless UI
+CopilotChat is a flexible chat interface component that can be placed anywhere in your app and can be resized as you desire.
+import { CopilotChat } from "@copilotkit/react-ui";
+ 
+export function YourComponent() {
+ return (
+ <CopilotChat
+ instructions={"You are assisting the user as best as you can. Answer in the best way possible given the data you have."}
+ labels={{
+ title: "Your Assistant",
+ initial: "Hi! 👋 How can I assist you today?",
+ }}
+ />
+ );
+}
+Previous
+Customize UI
+Next
+Styling Copilot UI
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+Direct to LLM
+Getting Started
+Quickstart
+Self Hosting (Copilot Runtime)
+Custom Look and Feel
+Customize UI
+Prebuilt Copilot UI
+Styling Copilot UI
+Custom Sub-Components
+Fully Headless UI
+Markdown rendering
+Agent Interaction
+Copilot Suggestions
+Human in the Loop (HITL)
+Customize AI Behavior
+Actions & Integration
+Frontend Actions
+Backend Actions & Agents
+Generative UI
+Connecting Your Data
+Authenticated Actions
+Advanced Features
+Bring Your Own LLM
+Connect to MCP Servers
+Guardrails
+Saving and restoring messages
+Legacy Features
+Copilot Textarea
+Tutorials
+Tutorial: AI Todo App
+Tutorial: AI Powered Textarea
+Cookbook
+Cookbook: State Machines
+Troubleshooting Copilots
+Common Copilot Issues
+Migrate to 1.8.2
+Other
+Contributing
+Anonymous Telemetry
+Observability
+On this page
+Styling Copilot UI
+CopilotKit has a variety of ways to customize colors and structures of the Copilot UI components.
+CSS Variables
+Custom CSS
+Custom Icons
+Custom Labels
+If you want to customize the style as well as the functionality of the Copilot UI, you can also try the following:
+Custom Sub-Components
+Fully Headless UI
+CSS Variables (Easiest)
+The easiest way to change the colors using in the Copilot UI components is to override CopilotKit CSS variables.
+Hover over the interactive UI elements below to see the available CSS variables.
+CopilotKit
+Hi you! 👋 I can help you create a presentation on any topic.
+Hello CopilotKit!
+Powered by CopilotKit
+Once you've found the right variable, you can import CopilotKitCSSProperties and simply wrap CopilotKit in a div and override the CSS variables.
+import { CopilotKitCSSProperties } from "@copilotkit/react-ui";
+ 
+<div
+ style={
+ {
+ "--copilot-kit-primary-color": "#222222",
+ } as CopilotKitCSSProperties
+ }
+>
+ <CopilotSidebar .../>
+</div>
+Reference
+CSS Variable	Description
+--copilot-kit-primary-color	Main brand/action color - used for buttons, interactive elements
+--copilot-kit-contrast-color	Color that contrasts with primary - used for text on primary elements
+--copilot-kit-background-color	Main page/container background color
+--copilot-kit-secondary-color	Secondary background - used for cards, panels, elevated surfaces
+--copilot-kit-secondary-contrast-color	Primary text color for main content
+--copilot-kit-separator-color	Border color for dividers and containers
+--copilot-kit-muted-color	Muted color for disabled/inactive states
+Custom CSS
+In addition to customizing the colors, the CopilotKit CSS is structured to easily allow customization via CSS classes.
+globals.css
+.copilotKitButton {
+ border-radius: 0;
+}
+ 
+.copilotKitMessages {
+ padding: 2rem;
+}
+ 
+.copilotKitUserMessage {
+ background: #007AFF;
+}
+Reference
+For a full list of styles and classes used in CopilotKit, click here.
+CSS Class	Description
+.copilotKitMessages	Main container for all chat messages with scroll behavior and spacing
+.copilotKitInput	Text input container with typing area and send button
+.copilotKitUserMessage	Styling for user messages including background, text color and bubble shape
+.copilotKitAssistantMessage	Styling for AI responses including background, text color and bubble shape
+.copilotKitHeader	Top bar of chat window containing title and controls
+.copilotKitButton	Primary chat toggle button with hover and active states
+.copilotKitWindow	Root container defining overall chat window dimensions and position
+.copilotKitMarkdown	Styles for rendered markdown content including lists, links and quotes
+.copilotKitCodeBlock	Code snippet container with syntax highlighting and copy button
+.copilotKitChat	Base chat layout container handling positioning and dimensions
+.copilotKitSidebar	Styles for sidebar chat mode including width and animations
+.copilotKitPopup	Styles for popup chat mode including position and animations
+.copilotKitButtonIcon	Icon styling within the main chat toggle button
+.copilotKitButtonIconOpen .copilotKitButtonIconClose	Icon states for when chat is open/closed
+.copilotKitCodeBlockToolbar	Top bar of code blocks with language and copy controls
+.copilotKitCodeBlockToolbarLanguage	Language label styling in code block toolbar
+.copilotKitCodeBlockToolbarButtons	Container for code block action buttons
+.copilotKitCodeBlockToolbarButton	Individual button styling in code block toolbar
+.copilotKitSidebarContentWrapper	Inner container for sidebar mode content
+.copilotKitInputControls	Container for input area buttons and controls
+.copilotKitActivityDot1 .copilotKitActivityDot2 .copilotKitActivityDot3	Animated typing indicator dots
+.copilotKitDevConsole	Development debugging console container
+.copilotKitDevConsoleWarnOutdated	Warning styles for outdated dev console
+.copilotKitVersionInfo	Version information display styles
+.copilotKitDebugMenuButton	Debug menu toggle button styling
+.copilotKitDebugMenu	Debug options menu container
+.copilotKitDebugMenuItem	Individual debug menu option styling
+Custom Fonts
+You can customize the fonts by updating the fontFamily property in the various CSS classes that are used in the CopilotKit.
+globals.css
+.copilotKitMessages {
+ font-family: "Arial, sans-serif";
+}
+ 
+.copilotKitInput {
+ font-family: "Arial, sans-serif";
+}
+Reference
+You can update the main content classes to change the font family for the various components.
+CSS Class	Description
+.copilotKitMessages	Main container for all messages
+.copilotKitInput	The input field
+.copilotKitMessage	Base styling for all chat messages
+.copilotKitUserMessage	User messages
+.copilotKitAssistantMessage	AI responses
+Custom Icons
+You can customize the icons by passing the icons property to the CopilotSidebar, CopilotPopup or CopilotChat component.
+<CopilotChat
+ icons={{
+ // Use your own icons here – any React nodes
+ openIcon: <YourOpenIconComponent />,
+ closeIcon: <YourCloseIconComponent />,
+ }}
+/>
+Reference
+Icon	Description
+openIcon	The icon to use for the open chat button
+closeIcon	The icon to use for the close chat button
+headerCloseIcon	The icon to use for the close chat button in the header
+sendIcon	The icon to use for the send button
+activityIcon	The icon to use for the activity indicator
+spinnerIcon	The icon to use for the spinner
+stopIcon	The icon to use for the stop button
+regenerateIcon	The icon to use for the regenerate button
+pushToTalkIcon	The icon to use for push to talk
+Custom Labels
+To customize labels, pass the labels property to the CopilotSidebar, CopilotPopup or CopilotChat component.
+<CopilotChat
+ labels={{
+ initial: "Hello! How can I help you today?",
+ title: "My Copilot",
+ placeholder: "Ask me anything!",
+ stopGenerating: "Stop",
+ regenerateResponse: "Regenerate",
+ }} 
+/>
+Reference
+Label	Description
+initial	The initial message(s) to display in the chat window
+title	The title to display in the header
+placeholder	The placeholder to display in the input
+stopGenerating	The label to display on the stop button
+regenerateResponse	The label to display on the regenerate button
+Previous
+Prebuilt Copilot UI
+Next
+Custom Sub-Components
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+LangGraph
+LangGraph Integration
+Getting Started
+Quickstart
+Feature Viewer
+Custom Look and Feel
+Customize UI
+Prebuilt Copilot UI
+Styling Copilot UI
+Custom Sub-Components
+Fully Headless UI
+Markdown rendering
+Guides
+Chat with an Agent
+Generative UI
+Human in the Loop (HITL)
+Shared State
+Frontend Actions
+Multi-Agent Flows
+Persistence
+Advanced
+Tutorials & Videos
+Tutorial: Research ANA
+Tutorial: AI Travel App
+Video: Research Canvas
+Learn
+Agentic Copilots
+Shared State
+Streaming and Tool Calls
+LangGraph
+Message flow
+Terminology
+Troubleshooting
+Common LangGraph + CopilotKit Issues
+Migrate from v0.2 to v0.3
+Common Copilot Issues
+Migrate to 1.8.2
+Other
+Contributing
+Anonymous Telemetry
+On this page
+Quickstart
+Turn your LangGraph into an agent-native application in 10 minutes.
+Prerequisites
+Before you begin, you'll need the following:
+LangSmith API key
+OpenAI API key
+Getting started
+How do you want to get started?
+Bootstrap with the new CopilotKit CLI (Beta) or code along with us to get started.
+Use the CopilotKit CLI (NextJS only)
+I have a Next.js application and want to get started quickly.
+Code along
+I want to deeply understand what's happening under the hood or don't have a Next.js application.
+Run the CLI
+Just run this following command in your Next.js application to get started!
+Don't have a Next.js application?
+npx copilotkit@latest init -m LangGraph
+🎉 Talk to your agent!
+Congrats! You've successfully integrated a LangGraph agent chatbot to your application. Depending on the template you chose, you may see some different UI elements. To start, try asking a few questions to your agent.
+Can you tell me a joke?
+Can you help me understand AI?
+What do you think about React?
+Having trouble?
+What's next?
+You've now got a LangGraph agent running in CopilotKit! Now you can start exploring the various ways that CopilotKit can help you build power agent native applications.
+Implement Human in the Loop
+Allow your users and agents to collaborate together on tasks.
+Utilize Shared State
+Learn how to synchronize your agent's state with your UI's state, and vice versa.
+Add some generative UI
+Render your agent's progress and output in the UI.
+Setup frontend actions
+Give your agent the ability to call frontend tools, directly updating your application.
+Previous
+LangGraph Integration
+Next
+Customize UI
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+Direct to LLM
+Getting Started
+Quickstart
+Self Hosting (Copilot Runtime)
+Custom Look and Feel
+Customize UI
+Prebuilt Copilot UI
+Styling Copilot UI
+Custom Sub-Components
+Fully Headless UI
+Markdown rendering
+Agent Interaction
+Copilot Suggestions
+Human in the Loop (HITL)
+Customize AI Behavior
+Actions & Integration
+Frontend Actions
+Backend Actions & Agents
+Generative UI
+Connecting Your Data
+Authenticated Actions
+Advanced Features
+Bring Your Own LLM
+Connect to MCP Servers
+Guardrails
+Saving and restoring messages
+Legacy Features
+Copilot Textarea
+Tutorials
+Tutorial: AI Todo App
+Tutorial: AI Powered Textarea
+Cookbook
+Cookbook: State Machines
+Troubleshooting Copilots
+Common Copilot Issues
+Migrate to 1.8.2
+Other
+Contributing
+Anonymous Telemetry
+Observability
+On this page
+Fully Headless UI
+Fully customize your Copilot's UI from the ground up using headless UI
+The built-in Copilot UI can be customized in many ways -- both through CSS and by passing in custom sub-components.
+CopilotKit also offers fully custom headless UI through the useCopilotChat hook. Everything built with the built-in UI (and more) can be implemented with the headless UI, providing deep customizability.
+import { useCopilotChat } from "@copilotkit/react-core";
+import { Role, TextMessage } from "@copilotkit/runtime-client-gql";
+ 
+export function CustomChatInterface() {
+ const {
+ visibleMessages,
+ appendMessage,
+ setMessages,
+ deleteMessage,
+ reloadMessages,
+ stopGeneration,
+ isLoading,
+ } = useCopilotChat();
+ 
+ const sendMessage = (content: string) => {
+ appendMessage(new TextMessage({ content, role: Role.User }));
+ };
+ 
+ return (
+ <div>
+ {/* Implement your custom chat UI here */}
+ </div>
+ );
+}
+Resetting the chat history
+In some cases, users may want to reset the chat to clear the conversation history and start fresh. This can be useful when:
+The current conversation has become too long or confusing.
+You want to test different prompts or approaches from a clean slate.
+A user needs to reset the context to ensure the AI responds appropriately.
+This simple method allows you to reset the chat state with a button click.
+Why Reset the Chat?
+Resetting the chat clears all conversation history, helping you start fresh or troubleshoot AI responses.
+Preview
+Code
+Previous
+Custom Sub-Components
+Next
+Markdown rendering
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+Direct to LLM
+Getting Started
+Quickstart
+Self Hosting (Copilot Runtime)
+Custom Look and Feel
+Customize UI
+Prebuilt Copilot UI
+Styling Copilot UI
+Custom Sub-Components
+Fully Headless UI
+Markdown rendering
+Agent Interaction
+Copilot Suggestions
+Human in the Loop (HITL)
+Customize AI Behavior
+Actions & Integration
+Frontend Actions
+Backend Actions & Agents
+Generative UI
+Connecting Your Data
+Authenticated Actions
+Advanced Features
+Bring Your Own LLM
+Connect to MCP Servers
+Guardrails
+Saving and restoring messages
+Legacy Features
+Copilot Textarea
+Tutorials
+Tutorial: AI Todo App
+Tutorial: AI Powered Textarea
+Cookbook
+Cookbook: State Machines
+Troubleshooting Copilots
+Common Copilot Issues
+Migrate to 1.8.2
+Other
+Contributing
+Anonymous Telemetry
+Observability
+On this page
+Human in the Loop (HITL)
+Allow your agent and users to collaborate on complex tasks.
+What is Human-in-the-Loop (HITL)?
+Human-in-the-loop (HITL) allows agents to request human input or approval during execution, making AI systems more reliable and trustworthy. This pattern is essential when building AI applications that need to handle complex decisions or actions that require human judgment.
+When should I use this?
+HITL combines the efficiency of AI with human judgment, creating a system that's both powerful and reliable. The key advantages include:
+Quality Control: Human oversight at critical decision points
+Edge Cases: Graceful handling of low-confidence situations
+Expert Input: Leverage human expertise when needed
+Reliability: More robust system for real-world use
+How can I use this with my Direct to LLM Copilot?
+Custom UI Component (Direct to LLM)
+Enable the AI assistant to prompt the end-user with a choice (rendered inside the chat UI)
+Previous
+Copilot Suggestions
+Next
+Customize AI Behavior
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+Direct to LLM
+Getting Started
+Quickstart
+Self Hosting (Copilot Runtime)
+Custom Look and Feel
+Customize UI
+Prebuilt Copilot UI
+Styling Copilot UI
+Custom Sub-Components
+Fully Headless UI
+Markdown rendering
+Agent Interaction
+Copilot Suggestions
+Human in the Loop (HITL)
+Customize AI Behavior
+Actions & Integration
+Frontend Actions
+Backend Actions & Agents
+Generative UI
+Connecting Your Data
+Authenticated Actions
+Advanced Features
+Bring Your Own LLM
+Connect to MCP Servers
+Guardrails
+Saving and restoring messages
+Legacy Features
+Copilot Textarea
+Tutorials
+Tutorial: AI Todo App
+Tutorial: AI Powered Textarea
+Cookbook
+Cookbook: State Machines
+Troubleshooting Copilots
+Common Copilot Issues
+Migrate to 1.8.2
+Other
+Contributing
+Anonymous Telemetry
+Observability
+On this page
+Customize AI Behavior
+Learn how to customize the behavior of your AI assistant.
+There are three main ways to customize the behavior of your AI assistant:
+Appending to the prompt
+Passing the instructions parameter
+Overwriting the default makeSystemMessage
+Appending to the prompt (Recommended)
+CopilotKit provides the useCopilotAdditionalInstructions hook which allows you to add content to the prompt with whatever you want.
+Home.tsx
+import { CopilotKit, useCopilotAdditionalInstructions } from "@copilotkit/react-core";
+import { CopilotPopup } from "@copilotkit/react-ui"
+ 
+function Chat() {
+ useCopilotAdditionalInstructions({
+ instructions: "Do not answer questions about the weather.",
+ });
+ return <CopilotPopup />
+}
+ 
+export function Home() {
+ return (
+ <CopilotKit>
+ <Chat />
+ </CopilotKit>
+ )
+}
+You can even conditionally add instructions based on the application's state.
+Home.tsx
+function Chat() {
+ const [showWeather, setShowWeather] = useState(false);
+ 
+ useCopilotAdditionalInstructions({
+ instructions: "Do not answer questions about the weather.",
+ available: showWeather ? "enabled" : "disabled"
+ }, showWeather);
+}
+Advanced
+If appending to the prompt is not enough, you have some other options, specifically around updating the prompt directly.
+Passing the instructions parameter
+The instructions parameter is the recommended way to customize AI assistant behavior. It will remain compatible with performance optimizations to the CopilotKit platform.
+It can be customized for Copilot UI as well as programmatically:
+Copilot UI
+Headless UI
+Copilot UI components accept an instructions property:
+CustomCopilot.tsx
+import { CopilotChat } from "@copilotkit/react-ui";
+ 
+<CopilotChat
+ instructions="You are a helpful assistant specializing in tax preparation. Provide concise and accurate answers to tax-related questions."
+ labels={{
+ title: "Tax Preparation Assistant",
+ initial: "How can I help you with your tax preparation today?",
+ }}
+/>
+Overwriting the default system message
+For cases requiring complete control over the system message, you can use the makeSystemMessage function. We highly recommend reading CopilotKit's default system message before deciding to overwrite it, which can be found here.
+This approach is not recommended as it may interfere with more advanced optimizations made by CopilotKit. Only use this approach if the other options are not enough.
+Copilot UI
+Headless UI
+import { CopilotChat } from "@copilotkit/react-ui";
+ 
+const CustomCopilot: React.FC = () => (
+ <CopilotChat
+ instructions="You are a knowledgeable tax preparation assistant. Provide accurate and concise answers to tax-related questions, guiding users through the tax filing process."
+ labels={{
+ title: "Tax Preparation Assistant",
+ initial: "How can I assist you with your taxes today?",
+ }}
+ makeSystemMessage={myCustomTaxSystemMessage} 
+ />
+);
+Previous
+Human in the Loop (HITL)
+Next
+Frontend Actions
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+Direct to LLM
+Getting Started
+Quickstart
+Self Hosting (Copilot Runtime)
+Custom Look and Feel
+Customize UI
+Prebuilt Copilot UI
+Styling Copilot UI
+Custom Sub-Components
+Fully Headless UI
+Markdown rendering
+Agent Interaction
+Copilot Suggestions
+Human in the Loop (HITL)
+Customize AI Behavior
+Actions & Integration
+Frontend Actions
+Backend Actions & Agents
+Generative UI
+Connecting Your Data
+Authenticated Actions
+Advanced Features
+Bring Your Own LLM
+Connect to MCP Servers
+Guardrails
+Saving and restoring messages
+Legacy Features
+Copilot Textarea
+Tutorials
+Tutorial: AI Todo App
+Tutorial: AI Powered Textarea
+Cookbook
+Cookbook: State Machines
+Troubleshooting Copilots
+Common Copilot Issues
+Migrate to 1.8.2
+Other
+Contributing
+Anonymous Telemetry
+Observability
+On this page
+Markdown rendering
+When rendering an assistant message, CopilotKit uses react-markdown under the hood. This allows us to render rich text with links, headers and other UI components.
+If you wish to modify this behavior, you can either enrich and override the individual markdown components, or replace the entire <AssistantMessage /> entirely. This is useful for displaying elements within the assistant answer text, such as source citing, reasoning steps etc.
+Here's how it can be done:
+Replacing/Providing the markdown components with your own
+We will be adding a chip component. Similar to the one available with ChatGPT when sources are cited.
+First, let's create a chip component
+import { CopilotKit } from "@copilotkit/react-core";
+import { CopilotSidebar, ComponentsMap } from "@copilotkit/react-ui";
+import "@copilotkit/react-ui/styles.css";
+// We will include the styles in a separate css file, for convenience
+import "./styles.css";
+ 
+function YourComponent() {
+ const customMarkdownTagRenderers: ComponentsMap<{ "reference-chip": { href: string } }> = {
+ // You can make up your own tags, or use existing, valid HTML ones!
+ "reference-chip": ({ children, href }) => {
+ return (
+ <a
+ href={href}
+ target="_blank"
+ rel="noopener noreferrer"
+ className="w-fit border rounded-xl py-1 px-2 text-xs" // Classes list trimmed for brevity
+ >
+ {children}
+ <LinkIcon className="w-3.5 h-3.5" />
+ </a>
+ );
+ },
+ };
+ 
+ return (
+ <CopilotKit>
+ <CopilotSidebar
+ // For demonstration, we'll force the LLM to return our reference chip in every message
+ instructions={`
+ You are a helpful assistant.
+ End each message with a reference chip,
+ like so: <reference-chip href={href}>{title}</reference-chip>
+ `}
+ markdownTagRenderers={customMarkdownTagRenderers}
+ />
+ </CopilotKit>
+ )
+}
+Now, let's add styles to the component
+.reference-chip {
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ background-color: #f0f1f2;
+ color: #444;
+ border-radius: 12px;
+ padding: 2px 8px;
+ font-size: 0.8rem;
+ font-weight: 500;
+ text-decoration: none;
+ margin: 0 2px;
+ border: 1px solid #e0e0e0;
+ cursor: pointer;
+ box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+Replacing the entire markdown renderer
+If you wish to avoid the markdown renderer altogether, you can replace the <AssistantMessage /> component, which is the one to use it. See Custom Sub-Components
+Previous
+Fully Headless UI
+Next
+Copilot Suggestions
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+Direct to LLM
+Getting Started
+Quickstart
+Self Hosting (Copilot Runtime)
+Custom Look and Feel
+Customize UI
+Prebuilt Copilot UI
+Styling Copilot UI
+Custom Sub-Components
+Fully Headless UI
+Markdown rendering
+Agent Interaction
+Copilot Suggestions
+Human in the Loop (HITL)
+Customize AI Behavior
+Actions & Integration
+Frontend Actions
+Backend Actions & Agents
+TypeScript (Node.js)
+LangChain.js
+LangServe actions
+Remote Endpoint (Python)
+Remote Endpoint (LangGraph Platform)
+Generative UI
+Connecting Your Data
+Authenticated Actions
+Advanced Features
+Bring Your Own LLM
+Connect to MCP Servers
+Guardrails
+Saving and restoring messages
+Legacy Features
+Copilot Textarea
+Tutorials
+Tutorial: AI Todo App
+Tutorial: AI Powered Textarea
+Cookbook
+Cookbook: State Machines
+Troubleshooting Copilots
+Common Copilot Issues
+Migrate to 1.8.2
+Other
+Contributing
+Anonymous Telemetry
+Observability
+On this page
+Backend Actions & Agents
+Learn how to enable backend actions & agents in your Copilot.
+TypeScript / Node.js Actions
+Implement backend actions using TypeScript or Node.js within the CopilotRuntime.
+LangChain.js Actions
+Integrate LangChain JS chains as backend actions in your Copilot.
+LangServe Integration
+Connect your Copilot to LangChain chains hosted as separate services.
+Python SDK
+Use the CopilotKit Python SDK to create powerful remote actions and agents.
+CoAgents (LangGraph)
+Deeply embed LangGraph agents in applications
+Previous
+Frontend Actions
+Next
+TypeScript (Node.js)
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+Direct to LLM
+Getting Started
+Quickstart
+Self Hosting (Copilot Runtime)
+Custom Look and Feel
+Customize UI
+Prebuilt Copilot UI
+Styling Copilot UI
+Custom Sub-Components
+Fully Headless UI
+Markdown rendering
+Agent Interaction
+Copilot Suggestions
+Human in the Loop (HITL)
+Customize AI Behavior
+Actions & Integration
+Frontend Actions
+Backend Actions & Agents
+Generative UI
+Connecting Your Data
+Authenticated Actions
+Advanced Features
+Bring Your Own LLM
+Connect to MCP Servers
+Guardrails
+Saving and restoring messages
+Legacy Features
+Copilot Textarea
+Tutorials
+Tutorial: AI Todo App
+Tutorial: AI Powered Textarea
+Cookbook
+Cookbook: State Machines
+Troubleshooting Copilots
+Common Copilot Issues
+Migrate to 1.8.2
+Other
+Contributing
+Anonymous Telemetry
+Observability
+On this page
+Bring Your Own LLM
+Learn how to use any LLM with CopilotKit.
+LLM Adapters are responsible for executing the request with the LLM and standardizing the request/response format in a way that the Copilot Runtime can understand.
+Currently, we support the following LLM adapters natively:
+OpenAI Adapter (Azure also supported)
+OpenAI Assistant Adapter
+LangChain Adapter
+Groq Adapter
+Google Generative AI Adapter
+Anthropic Adapter
+You can use the LangChain Adapter to use any LLM provider we don't yet natively support!
+It's not too hard to write your own LLM adapter from scratch -- see the existing adapters for inspiration. And of course, we would love a contribution! ⭐️
+Copilot Cloud (Recommended)
+Use our hosted backend endpoint to get started quickly (OpenAI only).
+Self-hosting
+Learn to host CopilotKit's runtime yourself with your own backend.
+Configure the used LLM adapter on your Copilot Cloud dashboard!
+Previous
+Authenticated Actions
+Next
+Connect to MCP Servers
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+Direct to LLM
+Getting Started
+Quickstart
+Self Hosting (Copilot Runtime)
+Custom Look and Feel
+Customize UI
+Prebuilt Copilot UI
+Styling Copilot UI
+Custom Sub-Components
+Fully Headless UI
+Markdown rendering
+Agent Interaction
+Copilot Suggestions
+Human in the Loop (HITL)
+Customize AI Behavior
+Actions & Integration
+Frontend Actions
+Backend Actions & Agents
+Generative UI
+Connecting Your Data
+Authenticated Actions
+Advanced Features
+Bring Your Own LLM
+Connect to MCP Servers
+Guardrails
+Saving and restoring messages
+Legacy Features
+Copilot Textarea
+Tutorials
+Tutorial: AI Todo App
+Tutorial: AI Powered Textarea
+Cookbook
+Cookbook: State Machines
+Troubleshooting Copilots
+Common Copilot Issues
+Migrate to 1.8.2
+Other
+Contributing
+Anonymous Telemetry
+Observability
+On this page
+Connect to MCP Servers
+Integrate Model Context Protocol (MCP) servers into React applications
+Introduction
+The Model Context Protocol is an open standard that enables developers to build secure, two-way connections between their data sources and AI-powered tools. With MCP, you can:
+Connect AI applications to your data sources
+Enable AI tools to access and utilize your data securely
+Build AI-powered features that have context about your application
+For further reading, check out the Model Context Protocol website.
+Quickstart with CopilotKit
+Get an MCP Server
+First, we need to make sure we have an MCP server to connect to. You can use any MCP SSE endpoint you have configured.
+Get an MCP Server from Composio
+Use the CopilotKit CLI
+Use the CopilotKit CLI
+I have a Next.js application and want to get started quickly.
+Code along
+I want to deeply understand what's happening under the hood or don't have a Next.js application.
+Run the CLI
+Just run this following command in your Next.js application to get started!
+Don't have a Next.js application?
+npx copilotkit@latest init -m MCP
+Advanced Usage
+Implementing the McpToolCall Component
+Click to see the McpToolCall component implementation
+Self-Hosting Option
+Click here to learn how to use MCP with self-hosted runtime
+Previous
+Bring Your Own LLM
+Next
+Guardrails
+We're officially launching AG-UI, the protocol for agent and user interactivity! Learn more.
+Overview
+API Reference
+CHOOSE AGENT INTEGRATION
+Direct to LLM
+What is CopilotKit?
+Getting Started
+LLM Quickstart
+CoAgent Quickstart
+CopilotKit Feature Overviews
+Agentic Chat UI
+Custom Look and Feel
+Copilot Suggestions
+Human in the Loop (HITL)
+Generative UI
+Frontend Actions
+Backend Actions
+Shared State
+Learning
+Tutorial: AI Todo App
+Tutorial: AI Powered Textarea
+Tutorial: Research ANA
+Tutorial: AI Travel App
+Video: Research Canvas
+Cookbook: State Machines
+Troubleshooting
+Troubleshooting Copilots
+Other
+Contributing
+Anonymous Telemetry
+On this page
+Cookbook: State Machines
+Learn how to guide users through multi-step conversations using a state machine pattern.
+Overview
+When building chat-based applications, you often need to guide users through a series of steps or stages. This recipe shows how to implement a state machine pattern to keep your assistant focused and on-track.
+Live Example: https://state-machine-copilot.vercel.app/
+Example Source Code: https://github.com/CopilotKit/CopilotKit/tree/main/examples/copilot-state-machine
+This recipe assumes you have completed the quickstart guide and have a basic CopilotKit application running.
+What is a State Machine?
+A state machine is a model where your application can be in exactly one state at a time, with clear rules about how to move between states. For chat applications, this means:
+The assistant knows exactly what stage of the conversation it's in
+Only certain actions are available in each stage
+There are clear rules for moving to the next stage
+State Machines in CopilotKit
+When implementing a state machine in CopilotKit, the main piece that enables this pattern is the available prop present in most of our hooks. This prop will allow you conditionally control what instructions, context, and actions are available to the assistant.
+In this recipe, we combine the available prop with React state to control when each stage is active, sometimes through standard deterministic update (button clicks), and sometimes through LLM-driven actions.
+Basic Implementation
+Create a stage
+Each stage is composed of stage-specific instructions, context, and actions. These are enabled or disabled as the stage changes via the available prop. In this example of a stage, we are extracting a user's name and ensuring it is not in a list of other names.
+import { 
+ useCopilotAdditionalInstructions, 
+ useCopilotAction, 
+ useCopilotReadable 
+} from "@copilotkit/react-core";
+ 
+// ...
+ 
+/*
+ * Not required, but it is convenient to use a dedicated hook to define each 
+ * stage of the state machine
+ */
+function useStageOne(
+ stage: string, 
+ setStage: (stage: string) => void, 
+ setName: (name: string) => void
+) {
+ 
+ /*
+ * Each stage can define its own instructions, context, and transitions
+ * (implemented via copilotActions). We transition between stages by simply
+ * setting the `stage` variable from the handler of the transition:
+ */
+ 
+ // Add additional instructions to the system prompt if this stage is active
+ useCopilotAdditionalInstructions({
+ instructions: "Ask for the user's name politely.",
+ // Use "available" argument to enable this only when the stage is correct! //
+ available: stage === "one" ? "available" : "disabled"
+ })
+ 
+ // Add context to the system prompt if this stage is active
+ useCopilotReadable({
+ description: "Other names",
+ value: ["John", "Jane", "Jim"],
+ available: stage === "one" ? "available" : "disabled"
+ })
+ 
+ // Add an action to the assistant that transitions to the next stage if this stage is active
+ useCopilotAction({
+ name: "transitionToNextStage",
+ description: "Moves to the next stage, only called when the user's name is not in the list of other names",
+ available: stage === "one" ? "available" : "disabled", 
+ parameters: [
+ { name: "name", type: "string", description: "The name of the user", required: true },
+ ],
+ handler: ({ name }) => {
+ // Perform any state updates given the user's input
+ setName(name);
+ 
+ // Transition to the next stage 
+ setStage("two"); 
+ }
+ });
+}
+Create another stage
+Now, let's create a second stage that's simple and just greets the user by name as a pirate. This is mainly just to demonstrate how to add any additional stages. The name will be made available to this stage in the next step.
+import { useCopilotAdditionalInstructions } from "@copilotkit/react-core";
+ 
+// ...
+ 
+function useStageTwo(stage: string): void {
+ // Add stage-specific instructions - only available in stage "two"
+ useCopilotAdditionalInstructions({
+ instructions: "Talk to the user about their name and refer to them like a pirate would.",
+ available: stage === "two" ? "available" : "disabled"
+ })
+ 
+ // ...
+}
+ 
+// Any additional stages you want to add...
+Put it all together
+Finally, bring everything together into a chat component:
+import { useState } from "react";
+import { CopilotKit, useCopilotReadable } from "@copilotkit/react-core";
+import { CopilotChat } from "@copilotkit/react-ui";
+ 
+// ...
+ 
+function StateMachineChat() {
+ // Track the current stage and user's name
+ const [stage, setStage] = useState<string>("one");
+ const [name, setName] = useState<string>("");
+ 
+ // Readable context available across all stages
+ useCopilotReadable({
+ description: "User's name",
+ value: name,
+ }, [name])
+ 
+ // Initialize all stages with their required props
+ useStageOne(stage, setStage, setName);
+ useStageTwo(stage);
+ // any additional stages...
+ 
+ return (
+ <CopilotKit>
+ <CopilotChat/>
+ </CopilotKit>
+ )
+}
+Full example code
+🎉 You've implemented a state machine!
+To recap, each stage hook uses the available prop to control when its instructions, context, and actions are accessible to the assistant. This ensures that the assistant only uses the correct tools and context for the current stage.
+Next, let's see some advanced patterns you can implement with these fundamentals.
+Advanced Patterns
+This state machine pattern can be extended for complex interactions. Below are some advanced patterns you can implement with code sourced in our car sales example which you already saw a demo of in the overview.
+Stage Transition Approaches
+Code-driven Stage Transitions
+When you want to transition between stages, you can do so by setting the stage deterministically, at any point in code.
+const [stage, setStage] = useState<string>("one");
+ 
+// ...
+ 
+<button onClick={() => setStage("two")}>
+ Transition to next stage
+</button>
+The car sales demo uses this approach in generative UI (for more on generative UI, see the section below) to transition between stages when a user submits their contact information.
+Click here for the source code
+src/lib/stages/use-stage-get-contact-info.tsx
+// imports ...
+ 
+export function useStageGetContactInfo() {
+ const { setContactInfo, stage, setStage } = useGlobalState();
+ 
+ // ...
+ 
+ // Render the ContactInfo component and wait for the user's response.
+ useCopilotAction(
+ {
+ name: "getContactInformation",
+ description: "Get the contact information of the user",
+ available: stage === "getContactInfo" ? "enabled" : "disabled",
+ renderAndWaitForResponse: ({ status, respond }) => {
+ return (
+ <ContactInfo
+ status={status}
+ onSubmit={(name, email, phone) => {
+ // Commit the contact information to the global state.
+ setContactInfo({ name, email, phone });
+ 
+ // Let the agent know that the user has submitted their contact information.
+ respond?.("User has submitted their contact information.");
+ 
+ // This move the state machine to the next stage, buildCar deterministically.
+ setStage("buildCar");
+ }}
+ />
+ );
+ },
+ },
+ [stage],
+ );
+}
+LLM-Driven Stage Transitions
+Sometimes you need stages that can transition to different next stages based on user input or LLM-driven actions.
+Click here for the source code
+src/lib/stages/use-stage-sell-financing.tsx
+function useStageSellFinancing() {
+ const { stage, setStage } = useGlobalState();
+ const isActive = stage === "sellFinancing";
+ 
+ // Provide context to the AI
+ useCopilotReadable({
+ description: "Financing Information",
+ value: "Current promotion: 0% financing for 60 months...",
+ available: isActive ? "enabled" : "disabled"
+ });
+ 
+ // Different paths based on financing choice by user, LLM will decide which path to take
+ useCopilotAction({
+ name: "selectFinancing",
+ description: "Select the financing option",
+ available: stage === "sellFinancing" ? "enabled" : "disabled",
+ handler: () => setStage("getFinancingInfo"),
+ }, [stage]);
+ 
+ useCopilotAction({
+ name: "selectNoFinancing",
+ description: "Select the no financing option",
+ available: stage === "sellFinancing" ? "enabled" : "disabled",
+ handler: () => setStage("getPaymentInfo"),
+ }, [stage]);
+ 
+}
+Generative UI
+Generative UI is a pattern where tool calls are streamed and rendered for the user to visualize the progress an agent is making. It can also be combined with the Human-in-the-loop pattern to allow checkpoints where the user can intervene and help guide the agent.
+When combined with the state machine pattern, you can build deep and interactive conversations with the user. For example, the buildCar stage in the car sales demo uses generative UI to show the user available cars that they can choose from.
+Click here for the source code
+Build Car Stage
+Show Car Component
+src/lib/stages/use-stage-build-car.tsx
+export function useStageBuildCar() {
+ const { setSelectedCar, stage, setStage } = useGlobalState();
+ 
+ // ...
+ 
+ useCopilotAction({
+ name: "showCar",
+ description: "Show a single car that you have in mind. Do not call this more than once, call `showMultipleCars` if you have multiple cars to show.",
+ available: stage === "buildCar" ? "enabled" : "disabled", 
+ parameters: [
+ // excluded for brevity, see source code link above for more detail
+ ],
+ renderAndWaitForResponse: ({ args, status, respond }) => {
+ const { car } = args;
+ return (
+ <ShowCar
+ car={(car as Car) || ({} as Car)}
+ status={status}
+ onSelect={() => {
+ setSelectedCar((car as Car) || ({} as Car));
+ respond?.("User has selected a car you can see it in your readables, the system will now move to the next state, do not call call nextState.");
+ setStage("sellFinancing");
+ }}
+ onReject={() => respond?.("User wants to select a different car, please stay in this state and help them select a different car")}
+ />
+ );
+ },
+ }, [stage]);
+ // ...
+}
+Initial message loading
+To add an initial message to the chat, we can use the appendMessage function provided by the useCopilotChat hook.
+Improved experience coming soon
+This is a temporary solution and we will be improving this in the near future.
+Click here for the source code
+src/components/car-sales-chat.tsx
+import { useCopilotChat } from "@copilotkit/react-core";
+ 
+// ...
+ 
+const { appendMessage, isLoading } = useCopilotChat();
+ 
+// Render an initial message when the chat is first loaded
+useEffect(() => {
+ if (initialMessageSent || isLoading) return;
+ 
+ setTimeout(() => {
+ appendMessage(
+ new TextMessage({
+ content:
+ "Hi, I'm Fio, your AI car salesman. First, let's get your contact information before we get started.",
+ role: MessageRole.Assistant,
+ }),
+ );
+ setInitialMessageSent(true);
+ }, 500);
+}, [initialMessageSent, appendMessage, isLoading]);
+ 
+// ...
+Tools When Entering a Stage
+Sometimes you'll want to guide the AI to call a specific tool when entering a stage.
+The payment info stage demonstrates how to guide the AI to make specific tool calls by adding additional instructions to call the getPaymentInformation tool explicitly.
+Click here for the source code
+src/lib/stages/use-stage-get-payment-info.tsx
+export function useStageGetPaymentInfo() {
+ const { setCardInfo, stage, setStage } = useGlobalState();
+ 
+ // Conditionally add additional instructions for the agent's prompt.
+ useCopilotAdditionalInstructions({
+ available: stage === "getPaymentInfo" ? "enabled" : "disabled",
+ instructions: `
+ CURRENT STATE: You are now getting the payment information of the user. 
+ Say, 'Great! Now I need to get your payment information.' and MAKE SURE 
+ to then call the 'getPaymentInformation' action.
+ `,
+ }, [stage]);
+ 
+ // ...
+ 
+}
+Recap
+This recipe introduced a powerful pattern for building conversational AI applications using state machines. By breaking down complex interactions into discrete stages, each with focused instructions and actions, we can create more maintainable and user-friendly experiences.
+With this pattern, you can start building your own multi-stage conversations.
+Need Help?
+Need help or want to share what you've built? Join our Discord community or open an issue on GitHub.
+Previous
+Video: Research Canvas
+Next
+Common Copilot Issues

@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "atlas-mcp-server": {
+    "carls-bad-mcp-server": {
       "command": "node",
       "args": ["/Users/ukiiki/atlas-mcp-server/dist/server.js"],
       "env": {

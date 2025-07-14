@@ -1,6 +1,6 @@
-# Atlas MemberClicks MCP Server
+# Carl's Bad MCP Server
 
-A Model Context Protocol (MCP) server that provides integration with the Atlas MemberClicks API for managing members, committees, and events.
+A Model Context Protocol (MCP) server that provides AI-powered chamber management integration with the Atlas MemberClicks API for managing members, committees, and events.
 
 ## Features
 
@@ -159,7 +159,7 @@ The server includes comprehensive error handling:
 
 ## Support
 
-For issues or questions about the Atlas MemberClicks API, refer to their documentation:
+For issues or questions about Carl's Bad MCP Server or the Atlas MemberClicks API, refer to their documentation:
 - [Getting Started](https://api-v1.weblinkconnect.com/api-v1/getting-started/)
 - [API Resources](https://api-v1.weblinkconnect.com/api-v1/api-resources/)
 - [Profile Resources](https://api-v1.weblinkconnect.com/api-v1/api-resources/Profile)
