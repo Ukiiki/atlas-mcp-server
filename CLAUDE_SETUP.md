@@ -1,236 +1,120 @@
-# Setting Up Atlas MCP Server with Claude Desktop
+# Setting Up the Atlas MCP Server
 
-## Quick Setup for This Computer (macOS)
+This guide provides instructions for setting up the Atlas MCP (Model-Context-Protocol) server to connect with your Atlas MemberClicks data and use it within Claude Desktop.
 
-### 1. Set up Environment Variables
+## 1. Prerequisites
 
-First, create a `.env` file with your credentials:
+- **Node.js**: Version 18 or higher. You can download it from [https://nodejs.org](https://nodejs.org).
+- **Git**: For cloning the repository.
+- **Claude Desktop**: The application where you will use the server.
+
+## 2. Installation
+
+First, clone the repository to your local machine and install the dependencies.
+
 ```bash
-cd /Users/ukiiki/atlas-mcp-server
-cp .env.example .env
-```
+# Clone the repository
+git clone https://github.com/your-username/atlas-mcp-server.git
 
-Edit `.env` with your actual credentials:
-```env
-ATLAS_CLIENT_SECRET=your_actual_client_secret_here
-ATLAS_CLIENT_ID=CarlsbadChamber
-ATLAS_TENANT=carlsbad
-```
+# Navigate into the project directory
+cd atlas-mcp-server
 
-### 2. Build the Server
-```bash
-cd /Users/ukiiki/atlas-mcp-server
+# Install dependencies
+npm install
+
+# Compile the TypeScript code
 npm run build
 ```
 
-### 3. Configure Claude Desktop
+This will create a `dist` directory containing the compiled `server.js` file.
 
-The Claude Desktop configuration file is located at:
-```
-~/Library/Application Support/Claude/claude_desktop_config.json
-```
+## 3. Configuration
 
-**Option A: Copy the entire configuration (includes credentials)**
-```bash
-cp claude_config.json ~/Library/Application\ Support/Claude/claude_desktop_config.json
-```
+The server requires API credentials to connect to Atlas MemberClicks. There are two ways to provide these credentials, depending on how you run the server.
 
-**Option B: Add to existing configuration**
-If you already have other MCP servers configured, add this to your existing `claude_desktop_config.json`:
+### Method A: For Local Development (using `.env`)
 
-```json
-{
-  "mcpServers": {
-    "atlas-mcp-server": {
-      "command": "node",
-      "args": ["/Users/ukiiki/atlas-mcp-server/dist/server.js"],
-      "env": {
-        "ATLAS_CLIENT_SECRET": "1bd58eb5-f765-4fee-a139-312c9d4dead2",
-        "ATLAS_CLIENT_ID": "CarlsbadChamber",
-        "ATLAS_TENANT": "carlsbad"
+If you want to run the server directly from your terminal (e.g., for testing), you can use a `.env` file.
+
+1.  **Create a `.env` file** by copying the example file:
+    ```bash
+    cp .env.example .env
+    ```
+
+2.  **Edit the `.env` file** with your actual credentials:
+    ```env
+    # Atlas MemberClicks API Configuration
+    ATLAS_CLIENT_SECRET=your_client_secret_here
+    OPENAI_API_KEY=your_openai_api_key_here
+    ATLAS_CLIENT_ID=CarlsbadChamber
+    ATLAS_TENANT=carlsbad
+    ```
+
+3.  **Run the server**:
+    ```bash
+    npm start
+    ```
+
+### Method B: For Claude Desktop Integration
+
+To use the server with Claude Desktop, you must add it to the `claude_desktop_config.json` file. This is the **recommended method** for using the server with Claude.
+
+1.  **Locate your Claude Desktop configuration file.** The location varies by operating system:
+    *   **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+    *   **Windows**: `%APPDATA%\\Claude\\claude_desktop_config.json`
+    *   **Linux**: `~/.config/Claude/claude_desktop_config.json`
+
+2.  **Edit the configuration file.** If the file doesn't exist, create it. Add the following JSON structure. If you already have other servers configured, add `atlas-mcp-server` to the `mcpServers` object.
+
+    **IMPORTANT**: You must replace `/path/to/your/atlas-mcp-server` with the actual, absolute path to where you cloned the project on your computer.
+
+    ```json
+    {
+      "mcpServers": {
+        "atlas-mcp-server": {
+          "command": "node",
+          "args": ["/path/to/your/atlas-mcp-server/dist/server.js"],
+          "env": {
+            "ATLAS_CLIENT_SECRET": "your_atlas_client_secret_here",
+            "ATLAS_CLIENT_ID": "CarlsbadChamber",
+            "ATLAS_TENANT": "carlsbad",
+            "OPENAI_API_KEY": "your_openai_api_key_here"
+          }
+        }
       }
     }
-  }
-}
-```
+    ```
+    *   **Windows Path Example**: `C:\\Users\\YourUser\\projects\\atlas-mcp-server\\dist\\server.js` (note the double backslashes `\\`).
+    *   **macOS/Linux Path Example**: `/Users/youruser/projects/atlas-mcp-server/dist/server.js`.
 
-### 4. Restart Claude Desktop
-Close and reopen Claude Desktop completely for the changes to take effect.
+3.  **Restart Claude Desktop.** Close and reopen the application completely for the changes to take effect.
 
-### 5. Test the Connection
-In Claude Desktop, you should now be able to use tools like:
-- `get_members` - Get all Atlas MemberClicks members
-- `get_committees` - Get all committees
-- `check_member_notifications` - Check for new members
+## 4. Troubleshooting
 
----
+### "Error: ATLAS_CLIENT_SECRET environment variable is required"
 
-## Setup on Different Computers
+This is the most common error and means the server did not receive the required credentials.
 
-### For macOS
+-   **If using Claude Desktop**: This error happens because the `env` block in your `claude_desktop_config.json` is either missing, empty, or does not contain `ATLAS_CLIENT_SECRET`. Double-check your configuration from **Step 3, Method B**.
+-   **If using local development**: Your `.env` file is likely missing or does not contain the `ATLAS_CLIENT_SECRET` variable.
 
-1. **Copy the project folder** to the new computer
-2. **Install Node.js** (18 or higher) from https://nodejs.org
-3. **Install dependencies and build:**
-   ```bash
-   cd /path/to/atlas-mcp-server
-   npm install
-   npm run build
-   ```
-4. **Configure Claude Desktop:**
-   ```bash
-   # Create config directory if it doesn't exist
-   mkdir -p ~/Library/Application\ Support/Claude
-   
-   # Update the path in claude_config.json to match the new location
-   # Then copy it:
-   cp claude_config.json ~/Library/Application\ Support/Claude/claude_desktop_config.json
-   ```
-5. **Restart Claude Desktop**
+### Server Not Starting in Claude Desktop
 
-### For Windows
+1.  **Verify the path**: Ensure the path in the `args` section of `claude_desktop_config.json` is the correct and absolute path to the `dist/server.js` file.
+2.  **Check for `dist/server.js`**: Make sure you have run `npm run build` and the file exists.
+3.  **Check Claude Desktop logs**: The application may have logs that provide more details.
 
-1. **Copy the project folder** to the new computer
-2. **Install Node.js** (18 or higher) from https://nodejs.org
-3. **Install dependencies and build:**
-   ```cmd
-   cd C:\path\to\atlas-mcp-server
-   npm install
-   npm run build
-   ```
-4. **Configure Claude Desktop:**
-   
-   Configuration file location: `%APPDATA%\Claude\claude_desktop_config.json`
-   
-   Create/edit the file with:
-   ```json
-   {
-     "mcpServers": {
-       "atlas-mcp-server": {
-         "command": "node",
-         "args": ["C:\\path\\to\\atlas-mcp-server\\dist\\server.js"],
-         "env": {}
-       }
-     }
-   }
-   ```
-5. **Restart Claude Desktop**
+### General Issues
 
-### For Linux
+-   **Check Node.js version**: Run `node --version` in your terminal to ensure you are using version 18 or higher.
+-   **Rebuild the project**: Run `npm run rebuild` to clean and rebuild the project from scratch.
 
-1. **Copy the project folder** to the new computer
-2. **Install Node.js** (18 or higher):
-   ```bash
-   # Ubuntu/Debian
-   curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-   sudo apt-get install -y nodejs
-   
-   # Or download from https://nodejs.org
-   ```
-3. **Install dependencies and build:**
-   ```bash
-   cd /path/to/atlas-mcp-server
-   npm install
-   npm run build
-   ```
-4. **Configure Claude Desktop:**
-   
-   Configuration file location: `~/.config/Claude/claude_desktop_config.json`
-   
-   ```bash
-   # Create config directory if it doesn't exist
-   mkdir -p ~/.config/Claude
-   
-   # Create/edit the configuration file
-   cat > ~/.config/Claude/claude_desktop_config.json << 'EOF'
-   {
-     "mcpServers": {
-       "atlas-mcp-server": {
-         "command": "node",
-         "args": ["/path/to/atlas-mcp-server/dist/server.js"],
-         "env": {}
-       }
-     }
-   }
-   EOF
-   ```
-5. **Restart Claude Desktop**
+## 5. Testing the Connection
 
----
+Once the server is configured and running in Claude Desktop, you can test it with prompts like:
 
-## Transferring the Project
+-   `Can you get all members from Atlas MemberClicks?`
+-   `Show me all committees and their members.`
+-   `Check for any new members in the last 3 days.`
 
-### Method 1: Copy Files Directly
-1. Zip the entire `/Users/ukiiki/atlas-mcp-server` folder
-2. Extract on the new computer
-3. Follow the setup instructions above for the target OS
-
-### Method 2: Git Repository (Recommended)
-1. **Initialize git repo:**
-   ```bash
-   cd /Users/ukiiki/atlas-mcp-server
-   git init
-   git add .
-   git commit -m "Initial Atlas MCP Server setup"
-   ```
-
-2. **Push to GitHub/GitLab:**
-   ```bash
-   # Create repo on GitHub, then:
-   git remote add origin https://github.com/yourusername/atlas-mcp-server.git
-   git push -u origin main
-   ```
-
-3. **Clone on new computer:**
-   ```bash
-   git clone https://github.com/yourusername/atlas-mcp-server.git
-   cd atlas-mcp-server
-   npm install
-   npm run build
-   ```
-
----
-
-## Troubleshooting
-
-### Server Not Starting
-1. Check Node.js version: `node --version` (should be 18+)
-2. Rebuild the project: `npm run rebuild`
-3. Check for errors: `npm run dev`
-
-### Claude Desktop Not Finding Server
-1. Verify the path in `claude_desktop_config.json` is correct
-2. Ensure the `dist/server.js` file exists
-3. Check Claude Desktop logs in the application
-
-### Permission Issues (macOS/Linux)
-```bash
-chmod +x dist/server.js
-```
-
-### Path Issues on Windows
-- Use forward slashes `/` or double backslashes `\\` in JSON
-- Avoid spaces in paths, or use quotes
-
----
-
-## Testing the Setup
-
-Once configured, test in Claude Desktop:
-
-1. **Basic test:**
-   ```
-   Can you get all members from Atlas MemberClicks?
-   ```
-
-2. **Committee test:**
-   ```
-   Show me all committees and their members
-   ```
-
-3. **New member monitoring:**
-   ```
-   Check for any new members in the last 3 days
-   ```
-
-The tools should now be available and working with your Atlas MemberClicks data!
+If the tools appear and return data, your setup is successful!

@@ -1,12 +1,13 @@
 {
   "mcpServers": {
-    "carls-bad-mcp-server": {
+    "atlas-mcp-server": {
       "command": "node",
-      "args": ["/Users/ukiiki/atlas-mcp-server/dist/server.js"],
+      "args": ["/path/to/your/atlas-mcp-server/dist/server.js"],
       "env": {
-        "ATLAS_CLIENT_SECRET": "1bd58eb5-f765-4fee-a139-312c9d4dead2",
+        "ATLAS_CLIENT_SECRET": "your_atlas_client_secret_here",
         "ATLAS_CLIENT_ID": "CarlsbadChamber",
-        "ATLAS_TENANT": "carlsbad"
+        "ATLAS_TENANT": "carlsbad",
+        "OPENAI_API_KEY": "your_openai_api_key_here"
       }
     }
   }
