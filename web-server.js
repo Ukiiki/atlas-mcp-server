@@ -9,6 +9,12 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Validate required environment variables
+if (!process.env.ATLAS_CLIENT_SECRET) {
+    console.error('Error: ATLAS_CLIENT_SECRET environment variable is required');
+    process.exit(1);
+}
+
 // Web server configuration
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || 'localhost';
@@ -27,13 +33,72 @@ class MCPInterface {
     constructor() {
         this.mcpProcess = null;
         this.requestId = 0;
+        this.pendingRequests = new Map();
+        this.startMCPProcess();
+    }
+
+    startMCPProcess() {
+        const mcpPath = path.join(__dirname, 'dist/server.js');
+        console.log(`Spawning MCP process: ${mcpPath}`);
+
+        this.mcpProcess = spawn('node', [mcpPath], {
+            stdio: ['pipe', 'pipe', 'pipe'],
+            env: { ...process.env }
+        });
+
+        let buffer = '';
+        this.mcpProcess.stdout.on('data', (data) => {
+            buffer += data.toString();
+            const responses = buffer.split('\n');
+            buffer = responses.pop() || ''; // Keep the last, possibly incomplete, response
+
+            for (const responseStr of responses) {
+                // Guard against parsing non-JSON log lines
+                if (responseStr.trim() === '' || !responseStr.startsWith('{')) {
+                    if (responseStr.trim() !== '') {
+                        // console.log(`MCP stdout (ignored): ${responseStr}`);
+                    }
+                    continue;
+                }
+                try {
+                    const response = JSON.parse(responseStr);
+                    if (this.pendingRequests.has(response.id)) {
+                        const { resolve, reject } = this.pendingRequests.get(response.id);
+                        if (response.error) {
+                            reject(new Error(response.error.message));
+                        } else {
+                            resolve(response.result);
+                        }
+                        this.pendingRequests.delete(response.id);
+                    }
+                } catch (e) {
+                    console.error("Failed to parse MCP JSON response:", responseStr, e);
+                }
+            }
+        });
+
+        this.mcpProcess.stderr.on('data', (data) => {
+            // MCP server logs to stderr, so we pipe it to our console
+            console.error(`MCP stderr: ${data}`);
+        });
+
+        this.mcpProcess.on('close', (code) => {
+            console.error(`MCP process exited with code ${code}`);
+            // Reject all pending requests
+            for (const [id, { reject }] of this.pendingRequests.entries()) {
+                reject(new Error(`MCP process exited with code ${code}`));
+                this.pendingRequests.delete(id);
+            }
+            // Attempt to restart the process after a delay
+            console.log('Attempting to restart MCP process in 5 seconds...');
+            setTimeout(() => this.startMCPProcess(), 5000);
+        });
     }
 
     async callMCPTool(toolName, args = {}) {
         return new Promise((resolve, reject) => {
             const requestId = ++this.requestId;
             
-            // Create MCP request
             const request = {
                 jsonrpc: '2.0',
                 id: requestId,
@@ -44,54 +109,21 @@ class MCPInterface {
                 }
             };
 
-            // Spawn MCP server process
-            const mcpProcess = spawn('node', [path.join(__dirname, 'dist/server.js')], {
-                stdio: ['pipe', 'pipe', 'pipe'],
-                env: {
-                    ...process.env,
-                    ATLAS_CLIENT_SECRET: process.env.ATLAS_CLIENT_SECRET || '1bd58eb5-f765-4fee-a139-312c9d4dead2',
-                    ATLAS_CLIENT_ID: process.env.ATLAS_CLIENT_ID || 'CarlsbadChamber',
-                    ATLAS_TENANT: process.env.ATLAS_TENANT || 'carlsbad'
-                }
-            });
+            this.pendingRequests.set(requestId, { resolve, reject });
 
-            let responseData = '';
-            let errorData = '';
-
-            mcpProcess.stdout.on('data', (data) => {
-                responseData += data.toString();
-            });
-
-            mcpProcess.stderr.on('data', (data) => {
-                errorData += data.toString();
-            });
-
-            mcpProcess.on('close', (code) => {
-                if (code === 0) {
-                    try {
-                        const response = JSON.parse(responseData);
-                        if (response.error) {
-                            reject(new Error(response.error.message));
-                        } else {
-                            resolve(response.result);
-                        }
-                    } catch (parseError) {
-                        reject(new Error('Failed to parse MCP response'));
-                    }
-                } else {
-                    reject(new Error(`MCP process exited with code ${code}: ${errorData}`));
-                }
-            });
-
-            // Send request to MCP server
-            mcpProcess.stdin.write(JSON.stringify(request) + '\n');
-            mcpProcess.stdin.end();
+            try {
+                this.mcpProcess.stdin.write(JSON.stringify(request) + '\n');
+            } catch (error) {
+                console.error("Failed to write to MCP process stdin", error);
+                this.pendingRequests.delete(requestId);
+                reject(error);
+            }
         });
     }
 
     async getMembers(restrictToMember = true) {
         try {
-            const result = await this.callMCPTool('get_members', { restrictToMember });
+            const result = await this.callMCPTool('get_profiles', { restrictToMember });
             return JSON.parse(result.content[0].text);
         } catch (error) {
             console.error('Error getting members:', error);
@@ -111,7 +143,7 @@ class MCPInterface {
 
     async getEvents(pageSize = 100) {
         try {
-            const result = await this.callMCPTool('get_events_with_attendance', { pageSize });
+            const result = await this.callMCPTool('get_events', { pageSize });
             return JSON.parse(result.content[0].text);
         } catch (error) {
             console.error('Error getting events:', error);
@@ -141,8 +173,16 @@ class MCPInterface {
 
     async getComprehensiveIntelligence() {
         try {
-            const result = await this.callMCPTool('get_comprehensive_member_intelligence');
-            return JSON.parse(result.content[0].text);
+            // This tool does not exist in the MCP server, so we return a default object
+            // to avoid breaking the frontend that expects a certain structure.
+            // console.warn("get_comprehensive_member_intelligence tool does not exist. Returning default object.");
+            return {
+                summary: { totalMembers: 0, totalEvents: 0, totalEventAttendance: 0, totalEventRevenue: 0, totalCommittees: 0, membersWithBusinesses: 0 },
+                memberBusinessAnalysis: { topIndustries: [] },
+                committeeEngagement: { totalCommitteeMembers: 0, committeeEvents: 0 },
+                eventAnalysis: {},
+                insights: []
+            };
         } catch (error) {
             console.error('Error getting comprehensive intelligence:', error);
             return null;
@@ -151,8 +191,10 @@ class MCPInterface {
 
     async addMember(memberData) {
         try {
-            const result = await this.callMCPTool('add_member', { memberData });
-            return JSON.parse(result.content[0].text);
+            // The tool is named 'create_profile' and expects 'profileData'
+            const result = await this.callMCPTool('create_profile', { profileData: memberData });
+            // The result from create_profile is not a JSON string in content, but a direct object.
+            return result;
         } catch (error) {
             console.error('Error adding member:', error);
             throw error;
@@ -161,8 +203,10 @@ class MCPInterface {
 
     async suspendMember(memberId) {
         try {
-            const result = await this.callMCPTool('suspend_member', { id: memberId });
-            return JSON.parse(result.content[0].text);
+            // The 'suspend_member' tool does not exist. Using 'update_profile' to set status.
+            const result = await this.callMCPTool('update_profile', { id: memberId, profileData: { Status: 'Inactive' } });
+            // The result from update_profile is not a JSON string in content, but a direct object.
+            return result;
         } catch (error) {
             console.error('Error suspending member:', error);
             throw error;
