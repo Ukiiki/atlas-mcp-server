@@ -15,6 +15,7 @@ import {
   DollarSign,
   CheckCircle,
   AlertCircle,
+  Download,
 } from 'lucide-react'
 
 const mockEvents = [
@@ -124,6 +125,26 @@ export default function EventsPage() {
   const getAttendancePercentage = (attendees: number, capacity: number) => {
     return Math.round((attendees / capacity) * 100)
   }
+
+  const handleDownload = async (eventId: number) => {
+    try {
+      const response = await fetch(`/api/events/${eventId}/registrations/csv`);
+      if (!response.ok) {
+        throw new Error('Failed to download CSV');
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `event-${eventId}-registrations.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (error) {
+      console.error('Error downloading CSV:', error);
+      // You might want to show an error message to the user
+    }
+  };
 
   return (
     <div className="flex-1 overflow-hidden bg-gray-50">
@@ -272,6 +293,12 @@ export default function EventsPage() {
                   </button>
                   <button className="text-red-600 hover:text-red-900">
                     <Trash2 className="w-4 h-4" />
+                  </button>
+                  <button
+                    className="text-blue-600 hover:text-blue-900"
+                    onClick={() => handleDownload(event.id)}
+                  >
+                    <Download className="w-4 h-4" />
                   </button>
                 </div>
               </div>

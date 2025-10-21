@@ -3,10 +3,10 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/api/atlas/:path*',
-        destination: 'http://localhost:3001/:path*'
-      }
-    ]
+        source: '/api/:path*',
+        destination: 'http://localhost:3000/api/:path*',
+      },
+    ];
   }
 }
 

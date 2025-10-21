@@ -222,6 +222,17 @@ class MCPInterface {
             return null;
         }
     }
+
+    async getEventRegistrationsCSV(eventId) {
+        try {
+            const result = await this.callMCPTool('get_event_registrations_csv', { eventId });
+            // The result from get_event_registrations_csv is a CSV string in content[0].text
+            return result.content[0].text;
+        } catch (error) {
+            console.error('Error getting event registrations CSV:', error);
+            throw error;
+        }
+    }
 }
 
 // Initialize MCP interface
@@ -232,6 +243,17 @@ app.get('/api/members', async (req, res) => {
     try {
         const members = await mcpInterface.getMembers();
         res.json(members);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/api/events/:id/registrations/csv', async (req, res) => {
+    try {
+        const csv = await mcpInterface.getEventRegistrationsCSV(req.params.id);
+        res.header('Content-Type', 'text/csv');
+        res.attachment(`event-${req.params.id}-registrations.csv`);
+        res.send(csv);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

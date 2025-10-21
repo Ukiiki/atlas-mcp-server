@@ -794,6 +794,20 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         },
       },
       {
+        name: 'get_event_registrations_csv',
+        description: 'Get event registrations as a CSV file',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            eventId: {
+              type: 'string',
+              description: 'The event ID',
+            },
+          },
+          required: ['eventId'],
+        },
+      },
+      {
         name: 'get_event_attendees',
         description: 'Get attendees for an event',
         inputSchema: {
@@ -1076,6 +1090,21 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             {
               type: 'text',
               text: JSON.stringify(profiles, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'get_event_registrations_csv': {
+        if (!args || typeof args !== 'object' || !('eventId' in args) || typeof args.eventId !== 'string') {
+          throw new Error('Event ID is required');
+        }
+        const csv = await atlasAPI.getEventRegistrationsCSV(args.eventId);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: csv,
             },
           ],
         };
