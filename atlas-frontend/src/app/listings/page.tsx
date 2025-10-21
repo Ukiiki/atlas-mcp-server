@@ -17,6 +17,7 @@ import {
   Clock,
   Users,
   TrendingUp,
+  Download,
 } from 'lucide-react'
 
 const mockListings = [
@@ -180,6 +181,25 @@ export default function ListingsPage() {
     ))
   }
 
+  const handleDownload = async () => {
+    try {
+      const response = await fetch('/api/business-listings/csv');
+      if (!response.ok) {
+        throw new Error('Failed to download CSV');
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'business-listings.csv';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (error) {
+      console.error('Error downloading CSV:', error);
+    }
+  };
+
   return (
     <div className="flex-1 overflow-hidden bg-gray-50">
       {/* Header */}
@@ -189,10 +209,19 @@ export default function ListingsPage() {
             <h1 className="text-2xl font-bold text-gray-900">Business Directory</h1>
             <p className="text-gray-600">Manage member business listings and directory</p>
           </div>
-          <button className="btn-primary flex items-center">
-            <Plus className="w-4 h-4 mr-2" />
-            Add New Listing
-          </button>
+          <div className="flex space-x-2">
+            <button
+              className="btn-secondary flex items-center"
+              onClick={handleDownload}
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Download CSV
+            </button>
+            <button className="btn-primary flex items-center">
+              <Plus className="w-4 h-4 mr-2" />
+              Add New Listing
+            </button>
+          </div>
         </div>
       </div>
 

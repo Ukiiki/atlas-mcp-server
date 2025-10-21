@@ -146,6 +146,25 @@ export default function EventsPage() {
     }
   };
 
+  const handleDownloadAll = async () => {
+    try {
+      const response = await fetch('/api/events/csv');
+      if (!response.ok) {
+        throw new Error('Failed to download CSV');
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'events.csv';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (error) {
+      console.error('Error downloading CSV:', error);
+    }
+  };
+
   return (
     <div className="flex-1 overflow-hidden bg-gray-50">
       {/* Header */}
@@ -155,10 +174,19 @@ export default function EventsPage() {
             <h1 className="text-2xl font-bold text-gray-900">Events</h1>
             <p className="text-gray-600">Manage chamber events and registrations</p>
           </div>
-          <button className="btn-primary flex items-center">
-            <Plus className="w-4 h-4 mr-2" />
-            Create New Event
-          </button>
+          <div className="flex space-x-2">
+            <button
+              className="btn-secondary flex items-center"
+              onClick={handleDownloadAll}
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Download All Events
+            </button>
+            <button className="btn-primary flex items-center">
+              <Plus className="w-4 h-4 mr-2" />
+              Create New Event
+            </button>
+          </div>
         </div>
       </div>
 

@@ -233,6 +233,26 @@ class MCPInterface {
             throw error;
         }
     }
+
+    async getBusinessListingsCSV() {
+        try {
+            const result = await this.callMCPTool('get_business_listings_csv');
+            return result.content[0].text;
+        } catch (error) {
+            console.error('Error getting business listings CSV:', error);
+            throw error;
+        }
+    }
+
+    async getEventsCSV() {
+        try {
+            const result = await this.callMCPTool('get_events_csv');
+            return result.content[0].text;
+        } catch (error) {
+            console.error('Error getting events CSV:', error);
+            throw error;
+        }
+    }
 }
 
 // Initialize MCP interface
@@ -244,6 +264,28 @@ app.get('/api/members', async (req, res) => {
         const members = await mcpInterface.getMembers();
         res.json(members);
     } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/api/events/csv', async (req, res) => {
+    try {
+        const csv = await mcpInterface.getEventsCSV();
+        res.header('Content-Type', 'text/csv');
+        res.attachment('events.csv');
+        res.send(csv);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/api/business-listings/csv', async (req, res) => {
+    try {
+        const csv = await mcpInterface.getBusinessListingsCSV();
+        res.header('Content-Type', 'text/csv');
+        res.attachment('business-listings.csv');
+        res.send(csv);
+    } catch (error)        {
         res.status(500).json({ error: error.message });
     }
 });

@@ -12,6 +12,17 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 import fetch from 'node-fetch';
 
+function jsonToCsv(items: any[]): string {
+  if (items.length === 0) {
+    return '';
+  }
+  const replacer = (key: any, value: any) => value === null ? '' : value;
+  const header = Object.keys(items[0]);
+  let csv = items.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','));
+  csv.unshift(header.join(','));
+  return csv.join('\r\n');
+}
+
 // Atlas MemberClicks API Configuration
 const AUTH_URL = process.env.ATLAS_AUTH_URL || 'https://www.weblinkauth.com/connect/token';
 const API_BASE_URL = process.env.ATLAS_API_BASE_URL || 'https://api-v1.weblinkconnect.com/api-v1';
@@ -736,6 +747,14 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 
       // ===== EVENT MANAGEMENT =====
       {
+        name: 'get_events_csv',
+        description: 'Get all events as a CSV file',
+        inputSchema: {
+          type: 'object',
+          properties: {},
+        },
+      },
+      {
         name: 'get_events',
         description: 'Get all events',
         inputSchema: {
@@ -968,6 +987,14 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 
       // ===== BUSINESS LISTINGS =====
       {
+        name: 'get_business_listings_csv',
+        description: 'Get business listings as a CSV file',
+        inputSchema: {
+          type: 'object',
+          properties: {},
+        },
+      },
+      {
         name: 'get_business_listings',
         description: 'Get business listings',
         inputSchema: {
@@ -1099,7 +1126,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         if (!args || typeof args !== 'object' || !('eventId' in args) || typeof args.eventId !== 'string') {
           throw new Error('Event ID is required');
         }
-        const csv = await atlasAPI.getEventRegistrationsCSV(args.eventId);
+        const registrations = await atlasAPI.getEventRegistrations(args.eventId);
+        const csv = jsonToCsv(registrations);
         return {
           content: [
             {
@@ -1333,6 +1361,19 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       // ===== EVENT MANAGEMENT =====
+      case 'get_events_csv': {
+        const events = await atlasAPI.getEvents();
+        const csv = jsonToCsv(events);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: csv,
+            },
+          ],
+        };
+      }
+
       case 'get_events': {
         const pageSize = args && typeof args === 'object' && 'pageSize' in args && typeof args.pageSize === 'number' 
           ? args.pageSize 
@@ -1566,6 +1607,19 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       // ===== BUSINESS LISTINGS =====
+      case 'get_business_listings_csv': {
+        const listings = await atlasAPI.getBusinessListings();
+        const csv = jsonToCsv(listings);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: csv,
+            },
+          ],
+        };
+      }
+
       case 'get_business_listings': {
         const pageSize = args && typeof args === 'object' && 'pageSize' in args && typeof args.pageSize === 'number' 
           ? args.pageSize : 200;
