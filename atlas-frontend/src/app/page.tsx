@@ -196,13 +196,13 @@ export default function Dashboard() {
 
   return (
     <CopilotChat>
-      <div className="flex-1 overflow-hidden bg-gray-50">
+      <div className="flex-1 overflow-hidden bg-transparent">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-gradient-to-r from-primary-600 via-ocean-600 to-primary-600 border-b border-primary-700/20 px-6 py-6 shadow-lg">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Catalyst Rise Dashboard</h1>
-            <p className="text-gray-600">Welcome to Catalyst Rise - The world's most advanced chamber management platform</p>
+            <h1 className="text-3xl font-bold text-white mb-1">Carlsbad Chamber Dashboard</h1>
+            <p className="text-primary-100">Connecting businesses, creating opportunities in Carlsbad</p>
           </div>
           <div className="flex items-center space-x-4">
             <div className="relative">
@@ -212,13 +212,13 @@ export default function Dashboard() {
                 placeholder="Search members, events, payments..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent w-80"
+                className="pl-10 pr-4 py-2 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent w-80"
               />
             </div>
             <select
               value={selectedTimeframe}
               onChange={(e) => setSelectedTimeframe(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="px-3 py-2 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-white/50"
             >
               <option value="7d">Last 7 days</option>
               <option value="30d">Last 30 days</option>
@@ -232,48 +232,48 @@ export default function Dashboard() {
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto p-6">
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="card bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-            <div className="flex items-center justify-between">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-fade-in">
+          <div className="stat-card bg-gradient-to-br from-primary-500 to-primary-700 hover:from-primary-600 hover:to-primary-800">
+            <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-blue-100 text-sm font-medium">Total Members</p>
-                <p className="text-3xl font-bold">{stats.totalMembers}</p>
-                <p className="text-blue-100 text-sm">+{stats.monthlyGrowth}% this month</p>
+                <p className="text-primary-100 text-sm font-semibold uppercase tracking-wide">Total Members</p>
+                <p className="text-4xl font-bold mt-2">{stats.totalMembers}</p>
+                <p className="text-primary-100 text-sm mt-1">+{stats.monthlyGrowth}% this month</p>
               </div>
-              <Users className="w-10 h-10 text-blue-200" />
+              <Users className="w-12 h-12 text-primary-200" />
             </div>
           </div>
 
-          <div className="card bg-gradient-to-r from-green-500 to-green-600 text-white">
-            <div className="flex items-center justify-between">
+          <div className="stat-card bg-gradient-to-br from-emerald-500 to-emerald-700 hover:from-emerald-600 hover:to-emerald-800">
+            <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-green-100 text-sm font-medium">Active Members</p>
-                <p className="text-3xl font-bold">{stats.activeMembers}</p>
-                <p className="text-green-100 text-sm">{Math.round((stats.activeMembers / stats.totalMembers) * 100)}% retention rate</p>
+                <p className="text-emerald-100 text-sm font-semibold uppercase tracking-wide">Active Members</p>
+                <p className="text-4xl font-bold mt-2">{stats.activeMembers}</p>
+                <p className="text-emerald-100 text-sm mt-1">{Math.round((stats.activeMembers / stats.totalMembers) * 100)}% retention rate</p>
               </div>
-              <Activity className="w-10 h-10 text-green-200" />
+              <Activity className="w-12 h-12 text-emerald-200" />
             </div>
           </div>
 
-          <div className="card bg-gradient-to-r from-purple-500 to-purple-600 text-white">
-            <div className="flex items-center justify-between">
+          <div className="stat-card bg-gradient-to-br from-ocean-500 to-ocean-700 hover:from-ocean-600 hover:to-ocean-800">
+            <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-purple-100 text-sm font-medium">Upcoming Events</p>
-                <p className="text-3xl font-bold">{stats.upcomingEvents}</p>
-                <p className="text-purple-100 text-sm">Next: {upcomingEvents[0]?.name || 'No events scheduled'}</p>
+                <p className="text-ocean-100 text-sm font-semibold uppercase tracking-wide">Upcoming Events</p>
+                <p className="text-4xl font-bold mt-2">{stats.upcomingEvents}</p>
+                <p className="text-ocean-100 text-sm mt-1 truncate max-w-[200px]">Next: {upcomingEvents[0]?.name || 'No events scheduled'}</p>
               </div>
-              <Calendar className="w-10 h-10 text-purple-200" />
+              <Calendar className="w-12 h-12 text-ocean-200" />
             </div>
           </div>
 
-          <div className="card bg-gradient-to-r from-orange-500 to-orange-600 text-white">
-            <div className="flex items-center justify-between">
+          <div className="stat-card bg-gradient-to-br from-sand-500 to-sand-700 hover:from-sand-600 hover:to-sand-800">
+            <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-orange-100 text-sm font-medium">Revenue (YTD)</p>
-                <p className="text-3xl font-bold">${stats.totalRevenue.toLocaleString()}</p>
-                <p className="text-orange-100 text-sm">{stats.pendingPayments} pending payments</p>
+                <p className="text-sand-100 text-sm font-semibold uppercase tracking-wide">Revenue (YTD)</p>
+                <p className="text-4xl font-bold mt-2">${stats.totalRevenue.toLocaleString()}</p>
+                <p className="text-sand-100 text-sm mt-1">{stats.pendingPayments} pending payments</p>
               </div>
-              <DollarSign className="w-10 h-10 text-orange-200" />
+              <DollarSign className="w-12 h-12 text-sand-200" />
             </div>
           </div>
         </div>

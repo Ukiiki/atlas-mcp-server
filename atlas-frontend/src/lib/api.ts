@@ -1,5 +1,6 @@
 // API integration layer for Atlas Chamber Management System
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api'
+// Use relative URLs to call Next.js API routes directly
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api'
 
 // TypeScript interfaces for our data
 export interface Member {

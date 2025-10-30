@@ -2,46 +2,83 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @layer base {
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-gradient-to-br from-slate-50 via-sky-50 to-cyan-50 text-gray-900;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    background-attachment: fixed;
   }
 }
 
 @layer components {
+  /* Modern Glass Cards */
   .card {
-    @apply bg-white rounded-lg shadow-sm border border-gray-200 p-6;
+    @apply bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 p-6 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02];
   }
-  
+
+  .card-gradient {
+    @apply bg-gradient-to-br from-white/90 to-primary-50/50 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 p-6 transition-all duration-300 hover:shadow-2xl;
+  }
+
+  /* Buttons */
   .btn-primary {
-    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-md transition-colors;
+    @apply bg-gradient-to-r from-primary-600 to-ocean-600 hover:from-primary-700 hover:to-ocean-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95;
   }
-  
+
   .btn-secondary {
-    @apply bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium py-2 px-4 rounded-md transition-colors;
+    @apply bg-white/90 hover:bg-white text-gray-900 font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg border border-gray-200 hover:border-primary-300;
   }
-  
+
+  .btn-ghost {
+    @apply bg-transparent hover:bg-primary-50/50 text-primary-700 font-medium py-2 px-4 rounded-lg transition-all duration-200;
+  }
+
+  /* Inputs */
   .input {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    @apply w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200;
   }
-  
+
+  /* Badges */
   .badge {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm;
   }
-  
+
   .badge-success {
-    @apply bg-green-100 text-green-800;
+    @apply bg-emerald-100/80 text-emerald-800 border border-emerald-200;
   }
-  
+
   .badge-warning {
-    @apply bg-yellow-100 text-yellow-800;
+    @apply bg-amber-100/80 text-amber-800 border border-amber-200;
   }
-  
+
   .badge-error {
-    @apply bg-red-100 text-red-800;
+    @apply bg-rose-100/80 text-rose-800 border border-rose-200;
+  }
+
+  .badge-info {
+    @apply bg-sky-100/80 text-sky-800 border border-sky-200;
+  }
+
+  /* Stat Cards */
+  .stat-card {
+    @apply relative overflow-hidden rounded-2xl p-6 text-white shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-3xl;
+  }
+
+  .stat-card::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-br opacity-90;
+  }
+
+  /* Glassmorphism Effect */
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-lg;
+  }
+
+  /* Page Header */
+  .page-header {
+    @apply bg-gradient-to-r from-primary-600 via-ocean-600 to-primary-600 bg-size-200 animate-gradient;
   }
 }
 

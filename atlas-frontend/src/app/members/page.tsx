@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Users,
   Search,
@@ -17,70 +17,47 @@ import {
   Eye,
 } from 'lucide-react'
 
-const mockMembers = [
-  {
-    id: 1,
-    name: 'Sarah Johnson',
-    company: 'Johnson Marketing Solutions',
-    email: 'sarah@johnsonmarketing.com',
-    phone: '(760) 555-0123',
-    membershipType: 'Gold',
-    joinDate: '2023-01-15',
-    status: 'Active',
-    avatar: 'SJ'
-  },
-  {
-    id: 2,
-    name: 'Mike Chen',
-    company: 'Pacific Tech Solutions',
-    email: 'mike@pacifictech.com',
-    phone: '(760) 555-0124',
-    membershipType: 'Silver',
-    joinDate: '2023-03-22',
-    status: 'Active',
-    avatar: 'MC'
-  },
-  {
-    id: 3,
-    name: 'Emily Rodriguez',
-    company: 'Coastal Real Estate',
-    email: 'emily@coastalre.com',
-    phone: '(760) 555-0125',
-    membershipType: 'Platinum',
-    joinDate: '2022-11-08',
-    status: 'Active',
-    avatar: 'ER'
-  },
-  {
-    id: 4,
-    name: 'David Park',
-    company: 'Park Financial Advisors',
-    email: 'david@parkfinancial.com',
-    phone: '(760) 555-0126',
-    membershipType: 'Gold',
-    joinDate: '2023-05-10',
-    status: 'Pending Renewal',
-    avatar: 'DP'
-  },
-  {
-    id: 5,
-    name: 'Lisa Thompson',
-    company: 'Thompson Design Studio',
-    email: 'lisa@thompsondesign.com',
-    phone: '(760) 555-0127',
-    membershipType: 'Silver',
-    joinDate: '2023-07-18',
-    status: 'Active',
-    avatar: 'LT'
-  }
-]
+interface Member {
+  id: string
+  name: string
+  firstName: string
+  lastName: string
+  company: string
+  email: string
+  phone: string
+  membershipType: string
+  joinDate: string
+  status: string
+  avatar: string
+}
 
 export default function MembersPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedFilter, setSelectedFilter] = useState('all')
   const [selectedMember, setSelectedMember] = useState(null)
+  const [members, setMembers] = useState<Member[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const filteredMembers = mockMembers.filter(member => {
+  // Fetch members from API
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const response = await fetch('/api/members')
+        if (response.ok) {
+          const data = await response.json()
+          setMembers(data)
+        }
+      } catch (error) {
+        console.error('Error fetching members:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchMembers()
+  }, [])
+
+  const filteredMembers = members.filter(member => {
     const matchesSearch = member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          member.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          member.email.toLowerCase().includes(searchQuery.toLowerCase())
@@ -103,11 +80,24 @@ export default function MembersPage() {
 
   const getMembershipColor = (type: string) => {
     switch (type) {
+      case 'Premium': return 'bg-purple-100 text-purple-800'
       case 'Platinum': return 'bg-purple-100 text-purple-800'
       case 'Gold': return 'bg-yellow-100 text-yellow-800'
+      case 'Standard': return 'bg-blue-100 text-blue-800'
       case 'Silver': return 'bg-gray-100 text-gray-800'
       default: return 'bg-blue-100 text-blue-800'
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex-1 overflow-hidden bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading Carlsbad Chamber Members...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -145,9 +135,8 @@ export default function MembersPage() {
             className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
           >
             <option value="all">All Members</option>
-            <option value="platinum">Platinum</option>
-            <option value="gold">Gold</option>
-            <option value="silver">Silver</option>
+            <option value="premium">Premium</option>
+            <option value="standard">Standard</option>
             <option value="active">Active</option>
             <option value="pending-renewal">Pending Renewal</option>
           </select>
@@ -249,7 +238,7 @@ export default function MembersPage() {
               <Users className="w-8 h-8 text-blue-500" />
               <div className="ml-3">
                 <p className="text-sm font-medium text-gray-500">Total Members</p>
-                <p className="text-2xl font-bold text-gray-900">{mockMembers.length}</p>
+                <p className="text-2xl font-bold text-gray-900">{members.length}</p>
               </div>
             </div>
           </div>
@@ -258,7 +247,7 @@ export default function MembersPage() {
               <Calendar className="w-8 h-8 text-green-500" />
               <div className="ml-3">
                 <p className="text-sm font-medium text-gray-500">Active Members</p>
-                <p className="text-2xl font-bold text-gray-900">{mockMembers.filter(m => m.status === 'Active').length}</p>
+                <p className="text-2xl font-bold text-gray-900">{members.filter(m => m.status === 'Active').length}</p>
               </div>
             </div>
           </div>
@@ -266,8 +255,8 @@ export default function MembersPage() {
             <div className="flex items-center">
               <DollarSign className="w-8 h-8 text-purple-500" />
               <div className="ml-3">
-                <p className="text-sm font-medium text-gray-500">Platinum Members</p>
-                <p className="text-2xl font-bold text-gray-900">{mockMembers.filter(m => m.membershipType === 'Platinum').length}</p>
+                <p className="text-sm font-medium text-gray-500">Premium Members</p>
+                <p className="text-2xl font-bold text-gray-900">{members.filter(m => m.membershipType === 'Premium').length}</p>
               </div>
             </div>
           </div>
@@ -275,8 +264,8 @@ export default function MembersPage() {
             <div className="flex items-center">
               <Building2 className="w-8 h-8 text-orange-500" />
               <div className="ml-3">
-                <p className="text-sm font-medium text-gray-500">Pending Renewal</p>
-                <p className="text-2xl font-bold text-gray-900">{mockMembers.filter(m => m.status === 'Pending Renewal').length}</p>
+                <p className="text-sm font-medium text-gray-500">Standard Members</p>
+                <p className="text-2xl font-bold text-gray-900">{members.filter(m => m.membershipType === 'Standard').length}</p>
               </div>
             </div>
           </div>

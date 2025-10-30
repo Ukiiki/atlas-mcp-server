@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Building2,
   MapPin,
@@ -19,104 +19,22 @@ import {
   TrendingUp,
 } from 'lucide-react'
 
-const mockListings = [
-  {
-    id: 1,
-    businessName: 'Johnson Marketing Solutions',
-    category: 'Marketing & Advertising',
-    address: '123 Carlsbad Village Dr, Carlsbad, CA 92008',
-    phone: '(760) 555-0123',
-    email: 'info@johnsonmarketing.com',
-    website: 'www.johnsonmarketing.com',
-    description: 'Full-service digital marketing agency specializing in social media, SEO, and brand development.',
-    membershipLevel: 'Gold',
-    featured: true,
-    rating: 4.8,
-    reviews: 24,
-    logo: 'JM',
-    status: 'Active'
-  },
-  {
-    id: 2,
-    businessName: 'Pacific Tech Solutions',
-    category: 'Technology',
-    address: '456 State St, Carlsbad, CA 92008',
-    phone: '(760) 555-0124',
-    email: 'contact@pacifictech.com',
-    website: 'www.pacifictech.com',
-    description: 'IT consulting and managed services for small to medium businesses.',
-    membershipLevel: 'Silver',
-    featured: false,
-    rating: 4.6,
-    reviews: 18,
-    logo: 'PT',
-    status: 'Active'
-  },
-  {
-    id: 3,
-    businessName: 'Coastal Real Estate',
-    category: 'Real Estate',
-    address: '789 Oceanside Blvd, Carlsbad, CA 92008',
-    phone: '(760) 555-0125',
-    email: 'emily@coastalre.com',
-    website: 'www.coastalrealestate.com',
-    description: 'Premier real estate services for buying and selling homes in North County San Diego.',
-    membershipLevel: 'Platinum',
-    featured: true,
-    rating: 4.9,
-    reviews: 42,
-    logo: 'CR',
-    status: 'Active'
-  },
-  {
-    id: 4,
-    businessName: 'Park Financial Advisors',
-    category: 'Financial Services',
-    address: '321 Business Park Dr, Carlsbad, CA 92008',
-    phone: '(760) 555-0126',
-    email: 'david@parkfinancial.com',
-    website: 'www.parkfinancial.com',
-    description: 'Comprehensive financial planning and investment management services.',
-    membershipLevel: 'Gold',
-    featured: false,
-    rating: 4.7,
-    reviews: 31,
-    logo: 'PF',
-    status: 'Active'
-  },
-  {
-    id: 5,
-    businessName: 'Thompson Design Studio',
-    category: 'Design & Creative',
-    address: '654 Innovation Way, Carlsbad, CA 92008',
-    phone: '(760) 555-0127',
-    email: 'lisa@thompsondesign.com',
-    website: 'www.thompsondesign.com',
-    description: 'Creative design studio offering branding, web design, and print marketing materials.',
-    membershipLevel: 'Silver',
-    featured: false,
-    rating: 4.5,
-    reviews: 15,
-    logo: 'TD',
-    status: 'Pending Review'
-  },
-  {
-    id: 6,
-    businessName: 'Martinez Construction',
-    category: 'Construction',
-    address: '987 Industrial Blvd, Carlsbad, CA 92008',
-    phone: '(760) 555-0128',
-    email: 'info@martinezconstruction.com',
-    website: 'www.martinezconstruction.com',
-    description: 'General contractor specializing in commercial and residential construction projects.',
-    membershipLevel: 'Gold',
-    featured: true,
-    rating: 4.8,
-    reviews: 28,
-    logo: 'MC',
-    status: 'Active'
-  }
-]
+interface BusinessListing {
+  id: string
+  businessName: string
+  category: string
+  address: string
+  phone: string
+  email: string
+  website: string
+  description: string
+  membershipLevel: string
+  featured: boolean
+  rating: number
+  reviews: number
+  logo: string
+  status: string
+}
 
 const categories = [
   'All Categories',
@@ -133,12 +51,33 @@ const categories = [
 ]
 
 export default function ListingsPage() {
+  const [listings, setListings] = useState<BusinessListing[]>([])
+  const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All Categories')
   const [selectedFilter, setSelectedFilter] = useState('all')
   const [viewMode, setViewMode] = useState('grid')
 
-  const filteredListings = mockListings.filter(listing => {
+  // Fetch listings from API
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch('/api/listings')
+        const data = await response.json()
+        setListings(data)
+      } catch (error) {
+        console.error('Error fetching listings:', error)
+        // Keep empty array if error
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchListings()
+  }, [])
+
+  const filteredListings = listings.filter((listing: BusinessListing) => {
     const matchesSearch = listing.businessName.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          listing.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          listing.category.toLowerCase().includes(searchQuery.toLowerCase())
@@ -205,7 +144,7 @@ export default function ListingsPage() {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-500">Total Listings</p>
-              <p className="text-2xl font-bold text-gray-900">{mockListings.length}</p>
+              <p className="text-2xl font-bold text-gray-900">{loading ? '...' : listings.length}</p>
             </div>
           </div>
           <div className="flex items-center">
@@ -214,7 +153,7 @@ export default function ListingsPage() {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-500">Active Listings</p>
-              <p className="text-2xl font-bold text-gray-900">{mockListings.filter(l => l.status === 'Active').length}</p>
+              <p className="text-2xl font-bold text-gray-900">{loading ? '...' : listings.filter((l: BusinessListing) => l.status === 'Active').length}</p>
             </div>
           </div>
           <div className="flex items-center">
@@ -223,7 +162,7 @@ export default function ListingsPage() {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-500">Featured Listings</p>
-              <p className="text-2xl font-bold text-gray-900">{mockListings.filter(l => l.featured).length}</p>
+              <p className="text-2xl font-bold text-gray-900">{loading ? '...' : listings.filter((l: BusinessListing) => l.featured).length}</p>
             </div>
           </div>
           <div className="flex items-center">
