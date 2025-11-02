@@ -1,0 +1,46 @@
+{
+  "name": "Carlsbad Chamber Approvals",
+  "short_name": "Chamber Approve",
+  "description": "Approve Claude's actions from your iPhone",
+  "start_url": "/approve",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0ea5e9",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Pending Approvals",
+      "short_name": "Approve",
+      "description": "View pending approvals",
+      "url": "/approve?tab=approvals",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Questions",
+      "short_name": "Questions",
+      "description": "Answer Claude's questions",
+      "url": "/approve?tab=questions",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

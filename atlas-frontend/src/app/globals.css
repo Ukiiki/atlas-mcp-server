@@ -63,7 +63,7 @@
 
   /* Stat Cards */
   .stat-card {
-    @apply relative overflow-hidden rounded-2xl p-6 text-white shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-3xl;
+    @apply relative overflow-hidden rounded-2xl p-6 text-white shadow-2xl transition-all duration-300 hover:scale-105;
   }
 
   .stat-card::before {
