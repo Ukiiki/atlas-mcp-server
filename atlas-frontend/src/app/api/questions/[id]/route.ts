@@ -3,10 +3,11 @@ import { approvalStore } from '@/lib/approvals'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const question = approvalStore.getQuestion(params.id)
+    const { id } = await params
+    const question = approvalStore.getQuestion(id)
 
     if (!question) {
       return NextResponse.json(
@@ -30,9 +31,10 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const body = await request.json()
     const { response } = body
 
@@ -43,7 +45,7 @@ export async function PATCH(
       )
     }
 
-    const question = approvalStore.answerQuestion(params.id, response)
+    const question = approvalStore.answerQuestion(id, response)
 
     if (!question) {
       return NextResponse.json(

@@ -3,10 +3,11 @@ import { approvalStore } from '@/lib/approvals'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const approval = approvalStore.getRequest(params.id)
+    const { id } = await params
+    const approval = approvalStore.getRequest(id)
 
     if (!approval) {
       return NextResponse.json(
@@ -30,9 +31,10 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const body = await request.json()
     const { status, notes } = body
 
@@ -45,9 +47,9 @@ export async function PATCH(
 
     let approval
     if (status === 'approved') {
-      approval = approvalStore.approveRequest(params.id, notes)
+      approval = approvalStore.approveRequest(id, notes)
     } else {
-      approval = approvalStore.rejectRequest(params.id, notes)
+      approval = approvalStore.rejectRequest(id, notes)
     }
 
     if (!approval) {
