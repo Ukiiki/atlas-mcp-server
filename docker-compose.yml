@@ -1,0 +1,22 @@
+services:
+  atlas-mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: atlas-mcp-server
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - ATLAS_CLIENT_SECRET=${ATLAS_CLIENT_SECRET}
+      - ATLAS_CLIENT_ID=${ATLAS_CLIENT_ID:-CarlsbadChamber}
+      - ATLAS_TENANT=${ATLAS_TENANT:-carlsbad}
+      - PORT=3000
+    networks:
+      - atlas-network
+
+networks:
+  atlas-network:
+    driver: bridge
