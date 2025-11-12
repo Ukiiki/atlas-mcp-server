@@ -12,9 +12,9 @@ const PORT = process.env.PORT || 3000;
 // Atlas MemberClicks API Configuration
 const AUTH_URL = process.env.ATLAS_AUTH_URL || 'https://www.weblinkauth.com/connect/token';
 const API_BASE_URL = process.env.ATLAS_API_BASE_URL || 'https://api-v1.weblinkconnect.com/api-v1';
-const CLIENT_ID = process.env.ATLAS_CLIENT_ID || 'CarlsbadChamber';
-const CLIENT_SECRET = process.env.ATLAS_CLIENT_SECRET;
-const TENANT = process.env.ATLAS_TENANT || 'carlsbad';
+const CLIENT_ID = (process.env.ATLAS_CLIENT_ID || 'CarlsbadChamber').trim();
+const CLIENT_SECRET = process.env.ATLAS_CLIENT_SECRET?.trim();
+const TENANT = (process.env.ATLAS_TENANT || 'carlsbad').trim();
 
 // Validate required environment variables
 if (!CLIENT_SECRET) {
